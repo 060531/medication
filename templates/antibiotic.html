@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antibiotic Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+            width: 150px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .button:hover {background-color: #3e8e41}
+        .button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+        }
+        .back-button:hover {background-color: #d32f2f}
+        .back-button:active {
+            background-color: #d32f2f;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select an Antibiotic</h1>
+        <div class="button-container">
+            <button class="button">Amikacin</button>
+            <button class="button">Amoxicillin</button>
+            <button class="button">Amphotericin B</button>
+            <a href="{{ url_for('ampicillin_route') }}" class="button">Ampicillin</a>
+            <button class="button">Cefotaxime</button>
+            <button class="button">CefTAZidime</button>
+            <button class="button">Clindamycin</button>
+            <button class="button">Colistin</button>
+            <button class="button">Fluconazole</button>
+            <button class="button">Gentamicin</button>
+            <button class="button">Meropenem</button>
+            <button class="button">MetroNIDAZOLE</button>
+            <button class="button">Vancomycin</button>
+        </div>
+        <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clindamycin Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+        }
+        .back-button:hover {background-color: #d32f2f}
+        .back-button:active {
+            background-color: #d32f2f;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>CLINDAMYCIN : 600mg/4ml</h2>
+        <p>Solution: Nss</p>
+        <p>ความเข้มข้น: 6mg/ml</p>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="dose">กรอกขนาดยา (mg):</label>
+                <input type="number" name="dose" placeholder="กรอกขนาดยา (mg)" required>
+            </div>
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if dose %}
+        <div class="result">
+            <p>Exp : Order : Clindamycin {{ dose }} mg  (5MKDose)</p>
+            <p>คำนวณความเข้มข้น 6mg/ml : {{ dose }} mg = ({{ dose }} × 1) / 6 = {{ ((dose * 1) / 6) | round(2) }} ml</p>
+            <p>ดูดยา {{ dose }} mg = ({{ dose }} × 4) / 600 = {{ ((dose * 4) / 600) | round(2) }} ml</p>
+            <p>= ยา {{ ((dose * 4) / 600) | round(2) }} ml + nss {{ (((dose * 1) / 6) | round(2) - ((dose * 4) / 600)) | round(2) }} ml</p>
+        </div>
+        {% endif %}
+    </div>
+    <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+</body>
+</html>

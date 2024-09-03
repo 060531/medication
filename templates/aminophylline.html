@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aminophylline Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .back-button, .calculate-button, .back-button-secondary {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+        }
+        .back-button {
+            background-color: #f44336;
+        }
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+        .back-button:active {
+            background-color: #d32f2f;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .back-button-secondary {
+            background-color: #008CBA;
+        }
+        .back-button-secondary:hover {
+            background-color: #007B9A;
+        }
+        .back-button-secondary:active {
+            background-color: #007B9A;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+        .calculate-button {
+            background-color: #007BFF;
+        }
+        .calculate-button:hover {
+            background-color: #0056b3;
+        }
+        .calculate-button:active {
+            background-color: #0056b3;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Aminophylline Calculation</h2>
+        <p>ยา Aminophylline</p>
+        <p>ความเข้มข้น 250mg/10ml</p>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="dose">กรอกขนาดยา (mg):</label>
+                <input type="text" name="dose" placeholder="กรอกขนาดยา (mg)" required>
+            </div>
+            <button type="submit" class="calculate-button">Calculate</button>
+        </form>
+
+        {% if dose %}
+<div class="result">
+    <p>Order : Aminophylline {{ dose }} mg </p>
+    <p>วิธีเตรียม Sterile water 60 u + ยา 10 mg (40 u)</p>
+    <p>ขนาดยา {{ dose }} mg = {{ (dose * 10) | int }} u</p>
+</div>
+{% endif %}
+
+    </div>
+    <div class="button-group">
+        <a href="javascript:history.back()" class="back-button-secondary">Back</a>
+        <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html>

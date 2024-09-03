@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Fentanyl Dosage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('http://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #0277bd;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+            background-color: rgba(2, 119, 189, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #035af0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px #999;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #f16a21;
+        }
+        button:active {
+            background-color: #ee6a6a;
+            box-shadow: 0 4px #666;
+            transform: translateY(4px);
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #0277bd;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+            display: inline-block;
+            text-align: center;
+        }
+        .back-button:hover {
+            background-color: #2f7bd3;
+        }
+        .back-button:active {
+            background-color: #789df2;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <h2>คำนวณการเตรียมยา Fentanyl</h2>
+
+    <div class="container">
+        <h1>Calculate Fentanyl Dosage</h1>
+        <form id="fentanyl-form">
+            <div class="form-group">
+                <label for="original_dosage">ขนาดยาตั้งต้น (mcg):</label>
+                <input type="number" id="original_dosage" name="original_dosage" placeholder="ป้อนขนาดยาตั้งต้น" value="30" required>
+            </div>
+            <div class="form-group">
+                <label for="original_volume">ปริมาณสารละลายตั้งต้น (ml):</label>
+                <input type="number" id="original_volume" name="original_volume" placeholder="ป้อนปริมาณสารละลายตั้งต้น" value="10" required>
+            </div>
+            <div class="form-group">
+                <label for="desired_dosage">ขนาดยาที่ต้องการ (mcg):</label>
+                <input type="number" id="desired_dosage" name="desired_dosage" placeholder="ป้อนขนาดยาที่ต้องการ" required>
+            </div>
+            <button type="submit">Calculate</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('fentanyl-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // ดึงข้อมูลจากฟอร์ม
+            let originalDosage = parseFloat(document.getElementById('original_dosage').value);
+            let originalVolume = parseFloat(document.getElementById('original_volume').value);
+            let desiredDosage = parseFloat(document.getElementById('desired_dosage').value);
+
+            // คำนวณปริมาณสารละลายที่ต้องเพิ่ม
+            let newVolume = (desiredDosage / originalDosage) * originalVolume;
+            let fentanylVolume = desiredDosage / 50; // คำนวณปริมาณยาที่ต้องดูด (ยา 100mcg/2ml = 50mcg/ml)
+
+            // แสดงผลลัพธ์
+            document.getElementById('result').textContent = `สูตร: (ขนาดยาที่ต้องการ / ขนาดยาตั้งต้น) * ปริมาณสารละลายตั้งต้น = ปริมาณสารละลายที่ต้องใช้\nต้องใช้สารละลาย: ${newVolume.toFixed(2)} ml\nต้องดูดยา: ${fentanylVolume.toFixed(2)} ml (Fentanyl 100mcg/2ml)`;
+        });
+    </script>
+    <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+</body>
+</html>

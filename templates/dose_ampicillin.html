@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ampicillin Dosage Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            background-color: #c3e6cb;
+        }
+        .dose-range {
+            color: red;
+            font-weight: bold;
+        }
+        .section-title {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+        }
+        .back-button:hover {background-color: #d32f2f}
+        .back-button:active {
+            background-color: #d32f2f;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ampicillin Dosage Information</h1>
+
+    <table>
+        <tr>
+            <th>PMA</th>
+            <th>PostNatal (days)</th>
+            <th>Min (mg)</th>
+            <th>Max (mg)</th>
+            <th>/dose</th>
+            <th>Interval</th>
+        </tr>
+        <tr>
+            <td>29 wk-</td>
+            <td>0 - 28 days</td>
+            <td>75.00</td>
+            <td>100.00</td>
+            <td>mg</td>
+            <td>q 12 hr(s)</td>
+        </tr>
+        <tr>
+            <td>29 wk-</td>
+            <td>29 days+</td>
+            <td>50.00</td>
+            <td>66.67</td>
+            <td>mg</td>
+            <td>q 8 hr(s)</td>
+        </tr>
+        <tr class="highlight">
+            <td>30 - 36 wk</td>
+            <td>0 - 14 days</td>
+            <td>75.00</td>
+            <td>100.00</td>
+            <td>mg</td>
+            <td>q 12 hr(s)</td>
+        </tr>
+        <tr>
+            <td>30 - 36 wk</td>
+            <td>15 days+</td>
+            <td>50.00</td>
+            <td>66.67</td>
+            <td>mg</td>
+            <td>q 8 hr(s)</td>
+        </tr>
+        <tr>
+            <td>37 - 44 wk</td>
+            <td>0 - 7 days</td>
+            <td>75.00</td>
+            <td>100.00</td>
+            <td>mg</td>
+            <td>q 12 hr(s)</td>
+        </tr>
+        <tr>
+            <td>37 - 44 wk</td>
+            <td>8 days+</td>
+            <td>50.00</td>
+            <td>66.67</td>
+            <td>mg</td>
+            <td>q 8 hr(s)</td>
+        </tr>
+        <tr>
+            <td>45 wk+</td>
+            <td>ALL</td>
+            <td>37.50</td>
+            <td>50.00</td>
+            <td>mg</td>
+            <td>q 6 hr(s)</td>
+        </tr>
+    </table>
+
+    <div class="section-title">IV slow push, or IM</div>
+    <p>Dose Range: <span class="dose-range">150 - 200 mg/day</span></p>
+    <p>IV slow push / IM: ถ้าไม่เกิน 500 mg ให้ slow push 3-5 นาที ถ้าเกิน ให้ slow push 10-15 นาที</p>
+    <p>Reconstituted solution: SWFI</p>
+    <p>Compatible Solution: D5W, LRS, NSS, SWI</p>
+    <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+</body>
+</html>

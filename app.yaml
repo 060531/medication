@@ -1,0 +1,7 @@
+runtime: python39  # Ensure this is the correct runtime
+
+entrypoint: gunicorn -b :$PORT app:app  # Ensure this matches your app's entry point
+
+handlers:
+  - url: /.*
+    script: auto

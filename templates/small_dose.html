@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Dose Medications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('http://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* จัดเรียงแนวตั้ง */
+            height: 100vh; /* สูงเท่าหน้าจอ */
+            overflow: hidden; /* ป้องกันไม่ให้หน้าจอเลื่อนไปในแนวตั้ง */
+            text-align: center;
+        }
+        h1 {
+            padding: 10px 20px;
+            background-color: rgba(2, 119, 189, 0.9); /* สีพื้นหลังฟ้าเข้มโปร่งแสง */
+            color: #ffeb3b; /* สีตัวอักษรเหลือง */
+            border-radius: 10px;
+            font-size: 20px; /* ขนาดตัวอักษรลดเหลือ 18px */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* เพิ่มเงาให้กับตัวอักษร */
+            font-weight: bold;
+            letter-spacing: 1px; /* เพิ่มระยะห่างระหว่างตัวอักษร */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้กับกล่อง */
+            margin-bottom: 10px; /* เพิ่มพื้นที่ระหว่าง h1 และตาราง */
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .table-container {
+            overflow-y: auto; /* ทำให้ตารางเลื่อนได้ในแนวตั้ง */
+            width: 100%;
+            height: calc(100vh - 150px); /* ปรับให้ตารางมีความสูงที่พอดี */
+            background-color: rgba(255, 255, 255, 0.8); /* สีพื้นหลังของตาราง */
+            border-radius: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 14px; /* ขนาดฟอนต์ */
+            text-align: left;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            min-width: 120px; /* ความกว้างขั้นต่ำของเซลล์ */
+        }
+        th {
+            background-color: rgba(240, 240, 240, 0.9);
+            text-align: center;
+        }
+        tr:hover {
+            background-color: rgba(245, 245, 245, 0.9);
+        }
+        .back-button {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #f44336;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+            transition: background-color 0.3s ease;
+            position: fixed;
+            bottom: 10px;
+        }
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+        .back-button:active {
+            background-color: #d32f2f;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Small Dose Medications (NICU)</h1>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>ชื่อยา</th>
+                <th>ขนาดยา</th>
+                <th>ขนาดที่ใช้</th>
+                <th>วิธีเตรียม</th>
+                <th>ขนาดยา</th>
+            </tr>
+
+            <tr>
+                <td>Gentamicin</td>
+                <td>80 mg / 2 ml</td>
+                <td>4 - 5 mg / kg / dose</td>
+                <td>5 % D/W 50 u + ยา 20 mg (50 u)</td>
+                <td>20 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Amikacin</td>
+                <td>500 mg / 2 ml</td>
+                <td>15 mg / kg / dose</td>
+                <td>5 % D/W 80 u + ยา 50 mg (20 u)</td>
+                <td>50 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Fentanyl</td>
+                <td>0.05 mg / 1 ml หรือ 50 µg / 1 ml</td>
+                <td>1 - 4 µg / kg / dose</td>
+                <td>5 % D/W 80 u + ยา 10 µg (20 u)</td>
+                <td>10 µg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Midazolam</td>
+                <td>5 mg / 1 ml</td>
+                <td>0.1 mg / kg / dose</td>
+                <td>5 % D/W 80 u + ยา 1 mg (20 u)</td>
+                <td>1 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Aminophyline</td>
+                <td>250 mg / 10 ml</td>
+                <td>1 mg / kg / dose</td>
+                <td>Sterile water 60 u + ยา 10 mg (40 u)</td>
+                <td>10 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Dexamethasone</td>
+                <td>5 mg / 1 ml</td>
+                <td>0.1 - 0.2 mg / kg / dose</td>
+                <td>Sterile water 80 u + ยา 1 mg (20 u)</td>
+                <td>1 mg = 10 u</td>
+            </tr>
+            <tr>
+                <td>Ranitidine</td>
+                <td>50 mg / 2 ml</td>
+                <td>Term 1.5 mg / kg / dose q 8 hrs<br>Preterm 0.1 mg / kg / dose q 12 hrs</td>
+                <td>5 % D/W 60 u + ยา 10 mg (40 u)</td>
+                <td>10 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Pavulon</td>
+                <td>4 mg / 2 ml</td>
+                <td>0.1 mg / kg / dose</td>
+                <td>5 % D/W 50 u + ยา 1 mg (50 u)</td>
+                <td>1 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Phenytoin (Dilantin)</td>
+                <td>250 mg / 5 ml</td>
+                <td>Loading 15 - 20 mg / kg<br>Maintainanace 4 - 8 mg / kg</td>
+                <td>0.9 % NSS 50 u + ยา 25 mg (50 u)</td>
+                <td>25 mg = 100 u</td>
+            </tr>
+            <tr>
+                <td>Hydrocortisone</td>
+                <td>100 mg / 2 ml</td>
+                <td>5 mg / kg / dose</td>
+                <td>5 % D/W 50 u + ยา 25 mg (50 u)</td>
+                <td>25 mg = 4 u</td>
+            </tr>
+            <tr>
+                <td>Epinephrine 1 : 1,000</td>
+                <td>1 mg / 1 ml</td>
+                <td>Epinephrine 1 : 10,000<br>0.1 - 0.3 ml / kg IV or ETT</td>
+                <td>0.9 % NSS 0.9 ml + ยา 0.1 ml</td>
+                <td>0.1 ml = 10 u<br>0.3 ml = 30 u</td>
+            </tr>
+            <tr>
+                <td>Vacuronium</td>
+                <td>4 mg / 1 ml</td>
+                <td>0.1 mg / kg / dose</td>
+                <td>5 % D/W 0.75 ml + ยา 0.25 ml (1 mg)</td>
+                <td>1 mg = 100 u<br>0.1 mg = 10 u</td> 
+            </tr>
+        </table>
+    </div>
+    <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+</body>
+</html>
