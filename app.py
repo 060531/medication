@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -10,9 +10,11 @@ UPDATE_DATE = "17 ต.ค. 2567"
 def inject_update_date():
     return dict(update_date=UPDATE_DATE)
 
+
 @app.route('/')
 def index():
-    return render_template('index.html', update_date=UPDATE_DATE)
+    return render_template('index.html')  # ให้ใช้ index.html เป็น template
+
 
 
 @app.route('/medication_administration')
@@ -1429,9 +1431,8 @@ def vancomycin_dose():
 
 
 
-    
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 
