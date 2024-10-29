@@ -1,0 +1,4 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/app', '.']
+timeout: "900s"  # กำหนด timeout เป็น 15 นาที

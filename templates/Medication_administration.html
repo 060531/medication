@@ -1,145 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medication</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-image: url('http://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: #fff;
-        }
-        .container {
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 1000px;
-            width: 100%;
-            background-color: transparent;
-        }
-        h1 {
-            font-size: 2.5em; /* ปรับขนาดตัวอักษรให้ใหญ่ขึ้น */
-            color: #ffeb3b; /* เปลี่ยนสีตัวอักษร */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* เพิ่มเงาให้กับตัวอักษร */
-            margin-bottom: 30px; /* เพิ่มระยะห่างระหว่างหัวข้อและเนื้อหา */
-            background-color: rgba(0, 0, 0, 0.5); /* เพิ่มพื้นหลังโปร่งใส */
-            padding: 10px 20px; /* เพิ่มพื้นที่ภายในให้กับหัวข้อ */
-            border-radius: 10px; /* เพิ่มขอบโค้งมนให้กับพื้นหลัง */
-            display: inline-block; /* ให้หัวข้อมีความกว้างตามเนื้อหา */
-        }
-        .button {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px 30px;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            color: #fff;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 5px #999;
-            width: auto;
-            white-space: nowrap;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .button:active {
-            background-color: #0056b3;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            max-width: 100%;
-            margin: 0 auto;
-            justify-content: center;
-        }
-        .back-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            color: #fff;
-            background-color: #f44336;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 5px #999;
-            display: inline-block;
-            text-align: center;
-        }
-        .back-button:hover {
-            background-color: #d32f2f;
-        }
-        .back-button:active {
-            background-color: #d32f2f;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Select a Medication</h1>
-        <div class="grid-container">
-            <a href="#" class="button">Acyclovir</a>
-            <a href="#" class="button">Albumin</a>
-            <a href="{{ url_for('amikin_route') }}" class="button">Amikin</a>
-            <a href="{{ url_for('aminophylline_route') }}" class="button">Aminophylline</a>
-            <a href="#" class="button">Amphotericin B</a>
-            <a href="{{ url_for('ampicillin_route') }}" class="button">Ampicillin</a>
-            <a href="#" class="button">CeFAZolin</a>
-            <a href="#" class="button">Cefotaxime</a>
-            <a href="#" class="button">CefTAZidime</a>
-            <a href="#" class="button">Chloral hydrate</a>
-            <a href="{{ url_for('clindamycin_route') }}" class="button">Clindamycin</a>
-            <a href="#" class="button">Colistin</a>
-            <a href="#" class="button">Digoxin</a>
-            <a href="#" class="button">DOBUTamine</a>
-            <a href="#" class="button">DOPamine</a>
-            <a href="#" class="button">Erythromycin</a>
-            <a href="{{ url_for('fentanyl_route') }}" class="button">Fentanyl</a>
+<!-- templates/medications.html -->
+{% extends "base.html" %}
 
-            <a href="#" class="button">Fluconazole</a>
-            <a href="#" class="button">Furosemide</a>
-            <a href="{{ url_for('gentamicin_route') }}" class="button">Gentamicin</a>
+{% block title %}Select a Medication{% endblock %}
 
-            <a href="#" class="button">HydrALAZINE</a>
-            <a href="#" class="button">Hydrocortisone</a>
-            <a href="#" class="button">Ibuprofen</a>
-            <a href="#" class="button">Indomethacin</a>
-            <a href="#" class="button">Insulin Human Regular</a>
-            <a href="#" class="button">Meropenem</a>
-            <a href="#" class="button">MetroNIDAZOLE</a>
-            <a href="#" class="button">Midazolam</a>
-            <a href="#" class="button">Morphine</a>
-            <a href="#" class="button">Norepinephrine</a>
-            <a href="#" class="button">Omeprazole</a>
-            <a href="#" class="button">Penicillin G</a>
-           
-            
- 
- <a href="#" class="button">SulBacTam</a>
-            <a href="{{ url_for('vancomycin_route') }}" class="button">Vancomycin</a>
-        </div>
-        <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
-    </div>
-</body>
-</html>
+{% block content %}
+<h1>Select a Medication</h1>
+<div class="grid-container">
+    <a href="{{ url_for('acyclovir_route') }}" class="medication-button">Acyclovir</a>
+    <a href="#" class="medication-button">Albumin</a>
+    <a href="{{ url_for('amikin_route') }}" class="medication-button">Amikin</a>
+    <a href="{{ url_for('aminophylline_route') }}" class="medication-button red-button">Aminophylline</a>
+    <a href="{{ url_for('amoxicillin_clavimoxy_route') }}" class="medication-button">Amoxicillin/<br>Clavimoxy</a>
+    <a href="{{ url_for('amphotericinB_route') }}" class="medication-button">Amphotericin B</a>
+    <a href="{{ url_for('ampicillin_route') }}" class="medication-button">Ampicillin</a>
+    <a href="{{ url_for('cefotaxime_route') }}" class="medication-button">Cefotaxime</a>
+    <a href="#" class="medication-button">CeFAZolin</a>
+    <a href="{{ url_for('ceftazidime_route') }}" class="medication-button">CefTAZidime</a>
+    <a href="{{ url_for('clindamycin_route') }}" class="medication-button">Clindamycin</a>
+    <a href="#" class="medication-button">Chloral hydrate</a>
+    <a href="{{ url_for('cloxacillin_route') }}" class="medication-button">Cloxacillin</a>
+    <a href="{{ url_for('colistin_route') }}" class="medication-button">Colistin</a>
+    <a href="{{ url_for('dexamethasone_route') }}" class="medication-button">Dexamethasone</a>
+    <a href="#" class="medication-button">Digoxin</a>
+    <a href="{{ url_for('dobutamine_route') }}" class="medication-button red-button">DOBUTamine</a>
+    <a href="{{ url_for('dopamine_route') }}" class="medication-button red-button">DOPamine</a>
+    <a href="{{ url_for('fentanyl_route') }}" class="medication-button red-button">Fentanyl</a>
+    <a href="{{ url_for('gentamicin_route') }}" class="medication-button">Gentamicin</a>
+    <a href="{{ url_for('hydrocortisone_route') }}" class="medication-button">Hydrocortisone</a>
+    <a href="#" class="medication-button">Ibuprofen</a>
+    <a href="#" class="medication-button">Indomethacin</a>
+    <a href="{{ url_for('insulin_route') }}" class="medication-button">Insulin Human Regular</a>
+    <a href="{{ url_for('meropenam_route') }}" class="medication-button">Meropenam</a>
+    <a href="{{ url_for('midazolam_route') }}" class="medication-button red-button">Midazolam</a>
+    <a href="{{ url_for('midazolam_fentanyl_route') }}" class="medication-button">Midazolam + Fentanyl</a>
+    <a href="#" class="medication-button">Metronidazole<br>(Flagyl)</a>
+    <a href="{{ url_for('morphine_route') }}" class="medication-button">Morphine</a>
+    <a href="{{ url_for('nimbex_route') }}" class="medication-button">Nimbex<br>(Clsatracurlum)</a>
+    <a href="#" class="medication-button">Norepinephrine</a>
+    <a href="#" class="medication-button">Omeprazole</a>
+    <a href="#" class="medication-button">Penicillin G</a>
+    <a href="#" class="medication-button">Phenobarbital</a>
+    <a href="{{ url_for('phenytoin_route') }}" class="medication-button">Phenytoin<br>(Dilantin)</a>
+    <a href="{{ url_for('remdsivir_route') }}" class="medication-button">Remdsivir</a>
+    <a href="{{ url_for('sulbactam_route') }}" class="medication-button">SulBacTam</a>
+    <a href="{{ url_for('sulperazone_route') }}" class="medication-button">Sulperazone</a>
+    <a href="{{ url_for('tazocin_route') }}" class="medication-button">Tazocin</a>
+    <a href="{{ url_for('unasyun_route') }}" class="medication-button">Unasyun</a>
+    <a href="{{ url_for('vancomycin_route') }}" class="medication-button">Vancomycin</a>
+</div>
+
+<a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+{% endblock %}

@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Calculate Dextrose Addition</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('http://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
+            background-image: url('https://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
+
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -85,10 +86,18 @@
             transform: translateY(4px);
         }
         .result {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #0277bd;
-        }
+    display: none; /* Hide the result initially */
+    margin-top: 20px;
+    font-size: 15px; /* Increase font size */
+    color: #ffffff; /* Change text color */
+    background-color: #0277bd; /* Add background color */
+    padding: 10px; /* Add padding */
+    border-radius: 8px; /* Round the corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Add text shadow */
+}
+
+
         .back-button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -112,6 +121,16 @@
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +143,7 @@
             <div class="form-group">
                 <label for="solution_type">สารตั้งต้น:</label>
                 <select id="solution_type" name="solution_type" required>
+                    <option value="D-5-W">D-5-W</option>
                     <option value="D-10-W">D-10-W หรือ D-10-N/5</option>
                     <option value="D-12.5-W">D-12.5-W หรือ D-12.5-N/5</option>
                 </select>
@@ -143,23 +163,32 @@
 
     <script>
         document.getElementById('dextrose-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+    event.preventDefault();
 
-            // ดึงข้อมูลจากฟอร์ม
-            let baseVolume = parseFloat(document.getElementById('base_volume').value);
-            let desiredConcentration = parseFloat(document.getElementById('desired_concentration').value);
-            let solutionType = document.getElementById('solution_type').value;
+    // ดึงข้อมูลจากฟอร์ม
+    let baseVolume = parseFloat(document.getElementById('base_volume').value);
+    let desiredConcentration = parseFloat(document.getElementById('desired_concentration').value);
+    let solutionType = document.getElementById('solution_type').value;
 
-            // ความเข้มข้นของสารตั้งต้น
-            let initialConcentration = solutionType === "D-10-W" ? 10 : 12.5;
+    // ความเข้มข้นของสารตั้งต้น
+    let initialConcentration = solutionType === "D-5-W" ? 5 : (solutionType === "D-10-W" ? 10 : 12.5);
 
-            // คำนวณปริมาณ 50% Dextrose ที่ต้องเติม
-            let volumeToAdd = (baseVolume * (desiredConcentration - initialConcentration)) / (50 - desiredConcentration);
+    // คำนวณปริมาณ 50% Dextrose ที่ต้องเติม
+    let volumeToAdd = (baseVolume * (desiredConcentration - initialConcentration)) / (50 - desiredConcentration);
 
-            // แสดงผลลัพธ์
-            document.getElementById('result').textContent = `ปริมาณ 50% Dextrose ที่ต้องเติม: ${volumeToAdd.toFixed(2)} ml`;
-        });
+    // แสดงผลลัพธ์
+    let resultElement = document.getElementById('result');
+    resultElement.textContent = `ปริมาณ 50% Dextrose ที่ต้องเติม: ${volumeToAdd.toFixed(2)} ml`;
+
+    // แสดงผลลัพธ์เมื่อคำนวณเสร็จ
+    resultElement.style.display = 'block'; // Make the result visible
+});
+
     </script>
     <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+
+    <footer>
+        <p>พัฒนาโดย สุคนธา บุญสุขจันทร์ | update {{ update_date }}</p>
+    </footer>
 </body>
 </html>
