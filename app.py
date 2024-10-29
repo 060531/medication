@@ -13,7 +13,8 @@ def inject_update_date():
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # ให้ใช้ index.html เป็น template
+    return render_template('index.html', update_date=UPDATE_DATE)
+
 
 
 
