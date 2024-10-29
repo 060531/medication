@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-
+from flask import Flask, render_template, request
+import math  # นำเข้า math เพื่อใช้สำหรับการปัดเศษ
 app = Flask(__name__)
 
 # กำหนดค่าวันที่สำหรับการอัพเดต
@@ -1131,16 +1131,26 @@ def drug_calculation():
     if not all([pma_weeks, pma_days, calc, bw, postnatal_days]):
         return "Invalid data received", 400
 
-    # ส่งข้อมูลไปยัง template drug_calculation.html
-    return render_template('drug_calculation.html', 
-                           pma_weeks=pma_weeks, 
-                           pma_days=pma_days, 
-                           calc=calc, 
-                           bw=bw, 
-                           postnatal_days=postnatal_days, 
-                           update_date=UPDATE_DATE)
+    # แปลงค่าที่รับมาเป็น float และปัดเศษน้ำหนักให้เป็นจำนวนเต็ม
+    bw = math.ceil(float(bw))  # ใช้ math.ceil เพื่อปัดน้ำหนักขึ้นให้เป็นจำนวนเต็ม
 
-import math  # นำเข้า math เพื่อใช้สำหรับการปัดเศษ
+    # เพิ่มตัวอย่างการคำนวณโดยใช้ค่าตัวแปร
+    dose = float(calc) * bw  # ตัวอย่างการคำนวณโดยการคูณ calc ด้วยน้ำหนัก
+
+    # ส่งข้อมูลไปยัง template drug_calculation.html
+    return render_template(
+        'drug_calculation.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        bw=bw,
+        postnatal_days=postnatal_days,
+        dose=dose,  # ส่งผลลัพธ์การคำนวณไปยัง template
+        update_date=UPDATE_DATE
+    )
+
+
+
 
 @app.route('/ampicillin_dose')
 def ampicillin_dose():
