@@ -14,6 +14,7 @@ def inject_update_date():
 def index():
     return render_template('index.html', update_date=UPDATE_DATE)
 
+
 @app.route('/medication_administration')
 def medication_administration_route():
     return render_template('Medication_administration.html', update_date=UPDATE_DATE)
