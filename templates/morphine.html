@@ -21,9 +21,9 @@
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 2px solid #e8d7be;
+            border: 2px solid #c8ecf9;
             border-radius: 10px;
-            background-color: rgba(236, 209, 198, 0.9); /* สีพื้นหลังพร้อมความโปร่งใส */
+            background-color: rgba(187, 255, 247, 0.576); /* สีพื้นหลังพร้อมความโปร่งใส */
             z-index: 0;
             position: relative;
         }
@@ -166,11 +166,78 @@
             position: relative;
             z-index: 1;
         }
+
+/* ปรับ input และปุ่มให้แสดงผลได้ดีบนหน้าจอเล็ก */
+@media (max-width: 600px) {
+    form {
+        gap: 15px; /* เพิ่มระยะห่างระหว่างส่วนต่าง ๆ ของฟอร์มในหน้าจอเล็ก */
+    }
+
+    .calculate-button {
+        width: 100%; /* ปรับให้ปุ่มกว้างเต็มที่ในหน้าจอเล็ก */
+        margin: 0 auto; /* จัดปุ่มให้อยู่ตรงกลาง */
+    }
+
+    input {
+        width: 100%; /* ให้ input กว้างเต็มที่ */
+        padding: 10px; /* เพิ่ม padding สำหรับการแสดงผลที่ชัดเจน */
+    }
+
+    label {
+        font-size: 16px; /* ปรับขนาดตัวอักษรของ label */
+    }
+}
+
+/* ปรับการแสดงผลสำหรับหน้าจอขนาดเล็ก */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    input, select {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-group label {
+        width: 40%; /* ปรับขนาดของ label */
+    }
+
+    .form-group input, .form-group select {
+        width: 40%; /* ปรับขนาดของ input และ select */
+    }
+
+    .calculate-button, .back-button, .back-button-secondary {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .result {
+        font-size: 14px;
+    }
+}
+
+/* ปรับขนาดตัวอักษรใน footer เมื่อหน้าจอเล็ก */
+@media (max-width: 600px) {
+footer {
+font-size: 14px; /* ลดขนาดตัวอักษรเมื่อหน้าจอเล็ก */
+}
+}
     </style>
 </head>
 <body>
-        <div class="container">
             <h2>Morphine (10mg/ml)</h2>
+            <div class="container">
             <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
             <div class="left-align">
                 <p><b> Solvent :</b> 0.9%NSS (ทำเป็น small dose) </p>
