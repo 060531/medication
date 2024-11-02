@@ -189,10 +189,18 @@
 }
 
 /* ปรับการแสดงผลสำหรับหน้าจอขนาดเล็ก */
+/* ปรับสไตล์เฉพาะสำหรับหน้าจอขนาดเล็ก */
 @media (max-width: 600px) {
-    .container {
-        padding: 15px;
+    .form-group {
+        margin-bottom: 20px; /* เพิ่มระยะห่างระหว่างฟอร์มและปุ่ม */
     }
+
+    .calculate-button {
+        width: 90%; /* ลดความกว้างของปุ่ม */
+        margin: 15px auto; /* เพิ่มระยะห่างจากปุ่มกับฟอร์ม */
+    }
+}
+
 
     h2 {
         font-size: 22px;
@@ -225,7 +233,6 @@
     .result {
         font-size: 14px;
     }
-}
 
 /* ปรับขนาดตัวอักษรใน footer เมื่อหน้าจอเล็ก */
 @media (max-width: 600px) {
