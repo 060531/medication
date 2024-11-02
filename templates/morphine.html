@@ -21,24 +21,29 @@
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 2px solid #e8cabe;
+            border: 2px solid #e8d7be;
             border-radius: 10px;
-            background-color: rgba(246, 200, 182, 0.9); /* สีพื้นหลังพร้อมความโปร่งใส */
+            background-color: rgba(236, 209, 198, 0.9); /* สีพื้นหลังพร้อมความโปร่งใส */
             z-index: 0;
             position: relative;
         }
 
         /* กรอบและการเน้นข้อความสำหรับ h2 */
-        h2 {
-            color: #d32f2f;
-            font-size: 28px;
-            font-weight: bold;
-            padding: 10px;
-            border: 2px solid #d32f2f; /* เพิ่มกรอบสีแดงเข้ม */
-            border-radius: 10px;
-            display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
-            background-color: #ffeb3b; /* พื้นหลังสีเหลือง */
-        }
+        h2  {
+    font-size: 1.8em; /* Adjusted font size */
+    color: #ffffff;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* Enhanced text shadow for more depth */
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgb(255, 1, 1), rgb(184, 2, 2)); /* Gradient background */
+    padding: 15px 30px; /* Increase padding for a larger, more prominent header */
+    border-radius: 15px; /* Smooth, rounded corners */
+    display: inline-block;
+    border: 2px solid rgba(2, 101, 22, 0.5); /* Subtle border */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Box shadow to make it pop */
+    font-weight: bold; /* Ensuring text is bold */
+    letter-spacing: 1px; /* Slightly increase letter spacing for better readability */
+}
+
 
         .form-group {
             margin-bottom: 15px;
@@ -164,25 +169,31 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Morphine (10mg/ml)</h2>
-        
-        <form method="POST">
-            <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
-            <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
-            <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
-        </form>
-
-        {% if dose %}
-<div class="result">
-    <p><b>Order :</b> Morphine {{ dose }} mg </p>
-    <div class="result left-align">
-<p><b>ขนาดยา : </b>{{ dose }} mg = {{ (dose / 10) | round(2) }} ml</p>
-</div>
-</div>
-{% endif %}
-
+        <div class="container">
+            <h2>Morphine (10mg/ml)</h2>
+            <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
+            <div class="left-align">
+                <p><b> Solvent :</b> 0.9%NSS (ทำเป็น small dose) </p>
+                <p><b>การติดตาม :</b>  อัตราการหายใจ ,ความดันโลหิต </p>
+            </div>
+            <form method="POST">
+                <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
+                <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
+                <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
+            </form>
+    
+            
+            {% if dose %}
+    <div class="result">
+        <p><b>Order :</b> Morphine {{ dose }} mg </p>
+        <div class="result left-align">
+    <p><b>วิธีเตรียม : </b> 0.9%NSS 90 u + ยา 10 u </p>
+    <p><b>ขนาดยา : </b>{{ dose }} mg = {{ (dose * 100) | int }} u</p>
     </div>
+    </div>
+    {% endif %}
+    
+        </div>
     <div class="button-group">
         <a href="javascript:history.back()" class="back-button-secondary">Back</a>
         <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>

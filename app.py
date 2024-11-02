@@ -23,6 +23,18 @@ def medication_administration_route():
     return render_template('Medication_administration.html', update_date=UPDATE_DATE)
 
 
+@app.route('/time_management')
+def time_management_route():
+    return render_template('time_management.html', update_date=UPDATE_DATE)
+
+@app.route('/run_time')
+def run_time():
+    return render_template('run_time.html')  # ให้แน่ใจว่ามีไฟล์ run_time.html ในโฟลเดอร์ templates
+
+@app.route('/run_time_stop')
+def run_time_stop():
+    return render_template('run_time_stop.html')  # ให้แน่ใจว่ามีไฟล์ run_time_stop.html ในโฟลเดอร์ templates
+   
 @app.route('/small_dose')
 def small_dose_route():
     return render_template('small_dose.html', update_date=UPDATE_DATE)
@@ -1084,7 +1096,9 @@ def meropenam_route():
 
     return render_template('meropenam.html', dose=dose, result_ml=result_ml, final_result=final_result, multiplication=multiplication, content_extra=content_extra, formula_display=formula_display, error=error, update_date=UPDATE_DATE)
 
-
+@app.route('/phenobarbital', methods=['GET'])
+def phenobarbital_route():
+    return render_template('phenobarbital.html', update_date=UPDATE_DATE)
 
 
 
@@ -1441,13 +1455,11 @@ def vancomycin_dose():
 
 
 
-
 import os
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # ให้ Render จัดการพอร์ต
-    app.run(host="0.0.0.0", port=port)
-
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host="0.0.0.0", port=port, debug=True)
 
 
 
