@@ -23,7 +23,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Jekyll dependencies (if applicable)
+      - name: Build Project
+        # Replace with your build command if necessary
         run: |
-          gem install bundler
-          bundle install
+          # Example build command, modify as needed
+          python build_script.py
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output_dir  # Specify your output directory
