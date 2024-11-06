@@ -1,0 +1,29 @@
+name: Python Application
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # เลือกเวอร์ชัน Python ที่ต้องการ เช่น 3.8 หรือ 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # ตรวจสอบให้แน่ใจว่าไฟล์ requirements.txt มีอยู่และถูกต้อง
+
+      - name: Run tests (หากคุณมีการทดสอบ)
+        run: |
+          python -m unittest discover -s tests  # หรือคำสั่งทดสอบที่คุณต้องการ
