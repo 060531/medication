@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Medication Schedule</title>
     <style>
         body {
@@ -24,7 +24,7 @@
         .container {
             max-width: 670px;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.396);
+            background-color: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(253, 253, 253, 0.8);
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -36,21 +36,18 @@
         }
 
         h1 {
-    font-size: 2.5em; /* ขนาดปกติ */
-    color: #ffffff;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-    margin-bottom: 30px;
-    background: linear-gradient(135deg, rgb(102, 119, 202), rgb(4, 71, 178));
-    padding: 15px 30px;
-    border-radius: 15px;
-    display: inline-block;
-    border: 2px solid rgba(2, 101, 22, 0.5);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-
+            font-size: 2.5em;
+            color: #ffffff;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgb(102, 119, 202), rgb(4, 71, 178));
+            padding: 15px 30px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
         label, input, select, button {
             display: block;
@@ -59,7 +56,83 @@
         }
 
         .result {
+            display: none; /* ซ่อนผลลัพธ์ก่อน */
             margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            max-width: 500px;
+            margin: 20px auto;
+            color: #333;
+        }
+
+        .result h3 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* ตารางสำหรับ 30, 36, 48 ชั่วโมง */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        .result-table th, .result-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .result-table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* รายการสำหรับช่วงเวลาอื่น */
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .result li {
+            padding: 5px 0;
+            font-size: 16px;
+            color: #333;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .result li:last-child {
+            border-bottom: none;
+        }
+
+        .styled-button {
+            background-color: #117314;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 4px #999;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .styled-button:hover {
+            background-color: #45a049;
+        }
+
+        .styled-button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 2px #666;
+            transform: translateY(4px);
         }
 
         .button-group {
@@ -70,11 +143,8 @@
         }
 
         .back-button, .back-button-secondary {
-            display: inline-block;
-            margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
-            text-align: center;
             color: #fff;
             border: none;
             border-radius: 10px;
@@ -90,12 +160,6 @@
             background-color: #d32f2f;
         }
 
-        .back-button:active {
-            background-color: #d32f2f;
-            box-shadow: 0 4px #666;
-            transform: translateY(4px);
-        }
-
         .back-button-secondary {
             background-color: #008CBA;
         }
@@ -104,47 +168,21 @@
             background-color: #007B9A;
         }
 
-        .styled-button {
-        background-color: #117314; /* สีพื้นหลัง */
-        border: none;
-        color: white; /* สีตัวอักษร */
-        padding: 10px 24px; /* ลดขนาด padding เพื่อลดความสูง */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        font-weight: bold; /* ทำให้ตัวหนังสือหนา */
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 12px; /* ขอบมน */
-        box-shadow: 0 4px #999; /* เงาปุ่ม */
-        transition: background-color 0.3s, transform 0.2s; /* เพิ่มเอฟเฟกต์การเปลี่ยนสีและการกด */
-    }
-
-    .styled-button:hover {
-        background-color: #45a049; /* สีเมื่อเอาเมาส์ชี้ */
-    }
-
-    .styled-button:active {
-        background-color: #3e8e41; /* สีเมื่อกด */
-        box-shadow: 0 2px #666; /* เงาเมื่อกด */
-        transform: translateY(4px); /* ยุบลงเมื่อกด */
-    }
-    @media (max-width: 768px) {
-    h1 {
-        font-size: 16px; /* ลดขนาดฟอนต์ของหัวข้อ */
-    }
-    button {
-        padding: 10px 20px; /* ลดขนาด padding ของปุ่ม */
-        font-size: 14px; /* ลดขนาดฟอนต์ของปุ่ม */
-    }
-}
-
         footer {
             text-align: center;
             margin-top: 20px;
             color: #fff;
             font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            .styled-button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
@@ -177,6 +215,7 @@
             <option value="8">Every 8 hours</option>
             <option value="12">Every 12 hours</option>
             <option value="24">Every 24 hours</option>
+            <option value="30">Every 30 hours</option>
             <option value="36">Every 36 hours</option>
             <option value="48">Every 48 hours</option>
         </select>
@@ -189,7 +228,7 @@
     <script>
         function calculateSchedule() {
             const dateInput = document.getElementById('date').value;
-            const timeInput = document.getElementById('startTime').value.padStart(2, '0'); // ให้มีรูปแบบ HH
+            const timeInput = document.getElementById('startTime').value.padStart(2, '0');
             const interval = parseInt(document.getElementById('interval').value);
             const resultDiv = document.getElementById('scheduleResult');
 
@@ -198,32 +237,28 @@
                 return;
             }
 
-            // สร้างเวลาเริ่มต้นจากวันที่และเวลาที่เลือก
             const startDateTime = new Date(`${dateInput}T${timeInput}:00`);
-            console.log("Start DateTime:", startDateTime);
-            console.log("Interval:", interval);
             const scheduleTimes = [];
 
-            // ตรวจสอบว่าช่วงเวลาเป็น 36 หรือ 48 ชั่วโมง เพื่อรันเป็นเวลา 10 วัน (240 ชั่วโมง)
-            if (interval === 36 || interval === 48) {
+            if (interval === 30 || interval === 36 || interval === 48) {
                 for (let i = 0; i < 10 * 24; i += interval) {
                     const doseTime = new Date(startDateTime.getTime() + i * 60 * 60 * 1000);
-                    console.log("Dose Time:", doseTime);
-                    scheduleTimes.push(`${doseTime.toLocaleDateString()} ${doseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+                    scheduleTimes.push({
+                        date: doseTime.toLocaleDateString(),
+                        time: doseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    });
                 }
 
-                // แสดงผลลัพธ์ในกรณีที่รัน 36 หรือ 48 ชั่วโมงเป็นเวลา 10 วัน
-                if (scheduleTimes.length > 0) {
-                    resultDiv.innerHTML = "<h3>Scheduled Times for 10 Days:</h3><ul>" + scheduleTimes.map(time => `<li>${time}</li>`).join('') + "</ul>";
-                } else {
-                    resultDiv.innerHTML = "<p style='color: red;'>No schedule times generated. Please check your inputs.</p>";
-                }
+                let tableHTML = "<h3>Scheduled Times for 10 Days:</h3><table class='result-table'><tr><th>Date</th><th>Time</th></tr>";
+                scheduleTimes.forEach(entry => {
+                    tableHTML += `<tr><td>${entry.date}</td><td>${entry.time}</td></tr>`;
+                });
+                tableHTML += "</table>";
+                resultDiv.innerHTML = tableHTML;
             } else {
-                // คำนวณเวลาการให้ยาทุก ๆ interval ชั่วโมงภายใน 24 ชั่วโมง
                 for (let i = interval; i <= 24; i += interval) {
                     const doseTime = new Date(startDateTime);
                     doseTime.setHours(doseTime.getHours() + i);
-
                     scheduleTimes.push({
                         time: doseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                         hours: doseTime.getHours()
@@ -233,13 +268,11 @@
                 // เรียงลำดับเวลาตามชั่วโมงจากน้อยไปมาก
                 scheduleTimes.sort((a, b) => a.hours - b.hours);
 
-                // แสดงผลลัพธ์ในกรณีที่รันภายใน 24 ชั่วโมง
-                if (scheduleTimes.length > 0) {
-                    resultDiv.innerHTML = "<h3>Scheduled Times for 24 Hours:</h3><ul>" + scheduleTimes.map(time => `<li>${time.time}</li>`).join('') + "</ul>";
-                } else {
-                    resultDiv.innerHTML = "<p style='color: red;'>No schedule times generated. Please check your inputs.</p>";
-                }
+                resultDiv.innerHTML = "<h3>Scheduled Times for 24 Hours:</h3><ul>" + 
+                    scheduleTimes.map(time => `<li>${time.time}</li>`).join('') + "</ul>";
             }
+        // แสดงผลลัพธ์
+        resultDiv.style.display = "block";
         }
     </script>
 

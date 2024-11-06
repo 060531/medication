@@ -51,7 +51,7 @@
         }
 
         .form-group input, .form-group select {
-            width: 100%;
+            width: 20%;
             padding: 8px;
             margin-top: 5px;
             border: 1px solid #ccc;
@@ -151,6 +151,13 @@
             position: relative;
         }
 
+        @media (max-width: 768px) {
+            .form-inline input[type="number"],
+            .form-inline .calculate-button {
+                width: 45%; /* ปรับขนาดช่องป้อนข้อมูลและปุ่มให้เล็กลง */
+            }
+        }
+        
         /* ให้แน่ใจว่าฟุตเตอร์ไม่ถูกซ่อน */
         footer {
             text-align: center;
@@ -164,8 +171,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Aminophylline (250mg/10ml)</h2>
+    <h2>Aminophylline (250mg/10ml)</h2>
+        <div class="container">
         <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
         <div class="left-align">
             <p><b> ขนาดยา :</b> 1.5 mg./kg./dose</p>
@@ -183,7 +190,7 @@
 <div class="result">
     <p><b>Order :</b> Aminophylline {{ dose }} mg </p>
     <div class="result left-align">
-<p><b>วิธีเตรียม : </b>Sterile water 60 u + ยา 10 mg (40 u)</p>
+<p><b>วิธีเตรียม : </b>Sterile water 60 u + ยา 40 u (10 mg)</p>
 <p><b>ขนาดยา : </b>{{ dose }} mg = {{ (dose * 10) | int }} u</p>
 </div>
 </div>
