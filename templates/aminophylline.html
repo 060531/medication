@@ -161,8 +161,10 @@
     }
 
     input[type="number"] {
-        width: 50%; /* ปรับขนาดความกว้าง */
-    }
+    width: 200px; /* กำหนดความกว้างตามต้องการ */
+    height: 40px; /* กำหนดความสูงตามต้องการ */
+}
+
 
     .calculate-button {
         padding: 8px 16px; /* ลดขนาดปุ่มให้พอดีกับช่อง input */
@@ -196,7 +198,7 @@
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
-            <button type="submit" class="calculate-button" name="calculate_dose">Calculate</button>
+            <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
         </form>
 
         {% if dose %}
