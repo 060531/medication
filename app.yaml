@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3  # Updated version
+        uses: actions/checkout@v3  # Updated to the latest version
 
       - name: Set up Python
-        uses: actions/setup-python@v4  # Updated version
+        uses: actions/setup-python@v4  # Updated to the latest version
         with:
           python-version: '3.9'
 
@@ -24,16 +24,17 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build Project
-        # Replace with your build command if necessary
+        # Ensure this command builds your project correctly
         run: |
-          # Example build command, modify as needed
+          # Replace this command with the actual command needed for your build
           python build_script.py
 
       - name: Disable Jekyll
+        # This ensures GitHub Pages doesn't interpret it as a Jekyll site
         run: echo "" > ./output_dir/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output_dir  # Specify your output directory
+          publish_dir: ./output_dir  # Ensure this is the correct build output directory
