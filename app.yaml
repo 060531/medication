@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3  # Updated to the latest version
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v4  # Updated to the latest version
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
@@ -24,17 +24,21 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build Project
-        # Ensure this command builds your project correctly
+        # ใช้ app.py สำหรับการ build
         run: |
-          # Replace this command with the actual command needed for your build
-          python build_script.py
+          python app.py  # หรือคำสั่งที่จำเป็นสำหรับการรัน app.py ของคุณ
+
+      - name: ตรวจสอบ Directory ของผลลัพธ์
+        run: |
+          echo "Contents of output_dir:"
+          ls -R ./output_dir
 
       - name: Disable Jekyll
-        # This ensures GitHub Pages doesn't interpret it as a Jekyll site
+        # เพิ่ม .nojekyll เพื่อปิดการใช้งาน Jekyll
         run: echo "" > ./output_dir/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output_dir  # Ensure this is the correct build output directory
+          publish_dir: ./output_dir  # ระบุ Directory ของผลลัพธ์ build ที่ถูกต้อง
