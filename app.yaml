@@ -29,6 +29,9 @@ jobs:
           # Example build command, modify as needed
           python build_script.py
 
+      - name: Disable Jekyll
+        run: echo "" > ./output_dir/.nojekyll
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
