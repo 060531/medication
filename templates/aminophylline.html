@@ -166,7 +166,7 @@
 
     .calculate-button {
         padding: 8px 16px; /* ลดขนาดปุ่มให้พอดีกับช่อง input */
-        font-size: 14px; /* ลดขนาดตัวอักษรของปุ่ม */
+        font-size: 10px; /* ลดขนาดตัวอักษรของปุ่ม */
     }
 }
 
@@ -196,7 +196,7 @@
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
-            <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
+            <button type="submit" class="calculate-button" name="calculate_dose">Calculate</button>
         </form>
 
         {% if dose %}
