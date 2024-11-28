@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
@@ -25,15 +25,14 @@ jobs:
 
       - name: Build Project
         run: |
-          python app.py  # สร้าง static files ใน output_dir
-
-      - name: ตรวจสอบ Directory ของผลลัพธ์
-        run: |
-          echo "Contents of output_dir:"
-          ls -R ./output_dir
+          python app.py  # เปลี่ยนคำสั่งนี้ตามที่คุณต้องการ
 
       - name: Disable Jekyll
+        # เพิ่มไฟล์ .nojekyll เพื่อปิดการใช้งาน Jekyll
         run: echo "" > ./output_dir/.nojekyll
+
+      - name: Debug Output Directory
+        run: ls -la ./output_dir
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
