@@ -1,0 +1,2 @@
+- name: Disable Jekyll
+  run: echo "" > ./output_dir/.nojekyll
