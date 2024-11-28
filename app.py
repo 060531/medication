@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request
+import os  # เพิ่มการนำเข้า os ที่นี่
 import math  # นำเข้า math เพื่อใช้สำหรับการปัดเศษ
+
 app = Flask(__name__)
 
 # กำหนดค่าวันที่สำหรับการอัพเดต
-UPDATE_DATE = "17 ต.ค. 2567"
+UPDATE_DATE = "22 November 2024"
 
 # ใช้ context_processor เพื่อส่งตัวแปร update_date ไปทุก template
 @app.context_processor
@@ -1455,10 +1457,11 @@ def vancomycin_dose():
 
 
 
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host="0.0.0.0", port=port, debug=True)  # เปิดใช้งาน Debug Mode
+
+
 
 
 

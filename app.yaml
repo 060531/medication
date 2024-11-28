@@ -24,9 +24,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build Project
-        # ใช้ app.py สำหรับการ build
         run: |
-          python app.py  # หรือคำสั่งที่จำเป็นสำหรับการรัน app.py ของคุณ
+          python app.py  # สร้าง static files ใน output_dir
 
       - name: ตรวจสอบ Directory ของผลลัพธ์
         run: |
@@ -34,11 +33,10 @@ jobs:
           ls -R ./output_dir
 
       - name: Disable Jekyll
-        # เพิ่ม .nojekyll เพื่อปิดการใช้งาน Jekyll
         run: echo "" > ./output_dir/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output_dir  # ระบุ Directory ของผลลัพธ์ build ที่ถูกต้อง
+          publish_dir: ./output_dir

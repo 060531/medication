@@ -16,74 +16,83 @@
             background-attachment: fixed;
         }
 
+
+        /* กรอบสีเหลืองออกครีม (#F6C8B6) */
         .container {
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 2px solid #ffffff5b;
+            border: 2px solid #007bbe;
             border-radius: 10px;
-            background-color: rgba(245, 227, 219, 0.9); 
+            background-color: rgba(96, 179, 218, 0.633); /* สีพื้นหลังพร้อมความโปร่งใส */
             z-index: 0;
             position: relative;
         }
 
+        /* กรอบและการเน้นข้อความสำหรับ h2 */
         h2 {
-            color: #0c0384;
+            color: #d32f2f;
             font-size: 28px;
             font-weight: bold;
             padding: 10px;
-            border: 2px solid #f5c504;
+            border: 2px solid #d32f2f; /* เพิ่มกรอบสีแดงเข้ม */
             border-radius: 10px;
-            display: inline-block;
-            background-color: #fced65; 
+            display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
+            background-color: #ffeb3b; /* พื้นหลังสีเหลือง */
         }
 
         .form-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             margin-bottom: 15px;
         }
 
         .form-group label {
+            display: block;
             font-weight: bold;
-            margin-right: 10px;
-            width: 30%; /* ควบคุมขนาดของ label */
-            text-align: right; /* จัดให้อยู่ขวา */
+            margin-bottom: 5px;
         }
 
         .form-group input, .form-group select {
-            width: 40%; /* ลดขนาดความกว้างของ input และ select */
+            width: 20%;
             padding: 8px;
+            margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             text-align: center;
         }
 
         .result {
-    margin-bottom: 20px; /* เพิ่มช่องว่างระหว่างผลลัพธ์และส่วน extra-content */
-    padding: 15px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    font-size: 18px;
-}
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px; /* ลดระยะห่างด้านล่างของ div */
+        }
 
-.extra-content {
-    margin-top: 20px; /* เพิ่มช่องว่างก่อน extra-content */
-    border: 2px solid #b3e5fc;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #e1f5fe;
-    z-index: 1;
-    position: relative;
-}
+        .result p {
+            margin: 5px 0; /* ลดระยะห่างด้านบนและล่างของแต่ละบรรทัด */
+            line-height: 1.2; /* ปรับความสูงของบรรทัด */
+        }
 
+        .left-align {
+            text-align: left; /* จัดข้อความชิดซ้าย */
+        }
+
+        .blue-box {
+            background-color: #e0f7fa;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
 
         .button-group {
             margin-top: 20px;
             display: flex;
             justify-content: center;
             gap: 10px;
+            margin-top: 20px;
         }
 
         .back-button, .calculate-button, .back-button-secondary {
@@ -116,15 +125,8 @@
         }
 
         .calculate-button {
-    background-color: #007BFF;
-    margin-top: 15px; /* เพิ่มระยะห่างจากช่องกรอกข้อมูล */
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
+            background-color: #007BFF;
+        }
 
         .calculate-button:hover {
             background-color: #0056b3;
@@ -136,88 +138,137 @@
             transform: translateY(4px);
         }
 
+        /* กรอบสำหรับข้อความที่ต้องการให้โดดเด่น */
+        .highlight-box {
+            background-color: #2960f6; /* สีพื้นหลังเหลือง */
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        /* ทำให้ส่วนนี้ชิดขอบซ้าย */
         .left-align {
             text-align: left;
         }
 
+        .extra-content {
+            border: 2px solid #b3e5fc;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #a6b5f0a6;
+            z-index: 1;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+    form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* เพิ่มระยะห่างระหว่างช่อง input และปุ่ม */
+    }
+
+    input[type="number"] {
+    width: 200px; /* กำหนดความกว้างตามต้องการ */
+    height: 40px; /* กำหนดความสูงตามต้องการ */
+}
+
+
+    .calculate-button {
+        padding: 8px 16px; /* ลดขนาดปุ่มให้พอดีกับช่อง input */
+        font-size: 10px; /* ลดขนาดตัวอักษรของปุ่ม */
+    }
+}
+       .header {
+            font-size: 18px; /* เพิ่มขนาดข้อความ */
+            text-decoration: underline; /* เส้นใต้ */
+            text-decoration-thickness: 2px; /* ความหนาของเส้นใต้ */
+            text-decoration-line: underline double; /* เส้นใต้สองเส้น */
+        }
+
+        .list {
+            list-style-type: none; /* เอา bullet ปกติออก */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .list li::before {
+            content: "➢ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ➢ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ➢ และข้อความ */
+        }
+
+        .item {
+            font-size: 18px; /* ขนาดข้อความ */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .item::before {
+            content: "☞ "; /* ใส่เครื่องหมาย ☞ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ☞ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ☞ และข้อความ */
+        }
+        .content {
+            line-height: 1.2; /* ลดความสูงของบรรทัด */
+        }
+
+        .content p {
+            margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+        }
+
+        .content .item {
+            margin-left: 20px; /* จัดระยะห่างซ้ายให้เป็นลำดับรอง */
+        }
+        .left-align {
+        line-height: 1.2; /* ลดความสูงระหว่างบรรทัด */
+    }
+
+    .left-align p {
+        margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+    }
+
+    .left-align ul.list {
+        margin: 5px 0; /* ลดระยะห่างระหว่างรายการ */
+        padding-left: 20px; /* เพิ่มการเยื้องให้รายการใน ul */
+    }
+
+    .left-align ul.list li {
+        margin: 3px 0; /* ลดระยะห่างระหว่างแต่ละรายการใน ul */
+    }
+        form {
+            border: 2px solid #7899ec; /* เส้นกรอบ */
+            border-radius: 10px; /* มุมโค้ง */
+            padding: 20px; /* ระยะห่างภายใน */
+            background-color: #c5d5f398; /* สีพื้นหลัง */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เงากรอบ */
+        }
+
+        
+        /* ให้แน่ใจว่าฟุตเตอร์ไม่ถูกซ่อน */
         footer {
             text-align: center;
             margin-top: 20px;
             color: rgb(255, 255, 255);
             font-size: 16px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 1;
         }
 
-        /* ปรับการแสดงผลสำหรับหน้าจอขนาดเล็ก */
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-
-            h2 {
-                font-size: 22px;
-            }
-
-            input, select {
-                font-size: 14px;
-                padding: 6px;
-            }
-
-            .form-group {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .form-group label {
-                width: 40%; /* ปรับขนาดของ label */
-            }
-
-            .form-group input, .form-group select {
-                width: 40%; /* ปรับขนาดของ input และ select */
-            }
-
-            .calculate-button, .back-button, .back-button-secondary {
-                font-size: 14px;
-                padding: 8px 12px;
-            }
-
-            .result {
-                font-size: 14px;
-            }
-        }
-
-/* ปรับขนาดตัวอักษรเมื่อหน้าจอเล็ก */
-@media (max-width: 600px) {
-    .extra-content {
-        font-size: 14px; /* ลดขนาดตัวอักษรสำหรับหน้าจอเล็ก */
-    }
-}
-
-/* ปรับขนาดตัวอักษรใน footer เมื่อหน้าจอเล็ก */
-@media (max-width: 600px) {
-    footer {
-        font-size: 14px; /* ลดขนาดตัวอักษรเมื่อหน้าจอเล็ก */
-    }
-}
     </style>
 </head>
 <body>
     <h2>Acyclovir (250mg/5ml)</h2>
         <div class="container">
-        <div class="left-align">
-            <p><b>ขนาดยา : </b> 10 mg/kg/dose</p>
-            <p><b>Solvent : </b> Sterile water <b>(**ยาคงตัวอยู่ได้ 12 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C**)</b> หรือ 5%Dextrose <b>(**ยาคงตัวอยู่ได้ 24 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C**)</b></p>
-            <p><b>การติดตาม : </b> ตรวจสอบการทำงานของตับ และไต</p>
-            <p><b>ความเข้มข้น : </b> 5 mg/ml.</p>
-        </div>
-
         <!-- Form for entering the dose -->
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" required value="{{ dose }}">
             <button type="submit" class="calculate-button" style="margin-bottom: 20px;">Calculate</button>
-
         </form>
     {% if result_ml_1 %}
         <!-- Display result after dose calculation -->
@@ -278,14 +329,21 @@
             </div>            
         </div>
         {% endif %}
-    </div>
 
+        <div class="left-align">
+            <p class="item"><b>ขนาดยา : </b> 10 mg/kg/dose</p>
+            <p class="item"><b>Solvent : </b> Sterile water <b>(**ยาคงตัวอยู่ได้ 12 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C**)</b> หรือ 5%Dextrose <b>(**ยาคงตัวอยู่ได้ 24 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C**)</b></p>
+            <p class="item"><b>การติดตาม : </b> ตรวจสอบการทำงานของตับ และไต</p>
+            <p class="item"><b>ความเข้มข้น : </b> 5 mg/ml.</p>
+        </div>
+    </div>
+    
     <div class="button-group">
         <a href="javascript:history.back()" class="back-button-secondary">Back</a>
         <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
     </div>
     <footer>
-        <p>พัฒนาโดย สุคนธา บุญสุขจันทร์ | update {{ update_date }}</p>
+    <p>Developed by Sukhontha Boonsukchan | update {{ update_date }}</p>
     </footer>
     
 </body>
