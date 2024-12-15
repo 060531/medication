@@ -9,21 +9,26 @@
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
         }
         h1 {
             text-align: center;
             color: #333;
+            font-size: 1.8em;
+            margin: 20px 10px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         th, td {
             border: 1px solid #ccc;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
+            font-size: 1em;
+            word-wrap: break-word;
         }
         th {
             background-color: #0073e6;
@@ -33,45 +38,29 @@
             background-color: #f2f2f2;
         }
         .note {
-            font-size: 12px;
+            font-size: 0.9em;
             color: #777;
             text-align: center;
-            margin-top: 10px;
+            margin: 10px 0;
         }
         .button-group {
-            margin-top: 20px;
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 20px;
+            margin: 20px;
         }
-
-        .back-button, .calculate-button, .back-button-secondary {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
+        .back-button, .back-button-secondary {
+            padding: 12px 20px;
+            font-size: 1em;
             text-decoration: none;
-            outline: none;
             color: #fff;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 5px #999;
+            border-radius: 5px;
+            text-align: center;
         }
-
         .back-button {
             background-color: #f44336;
         }
-
-        .back-button:hover {
-            background-color: #d32f2f;
-        }
-
         .back-button-secondary {
-            background-color: #008CBA;
-        }
-
-        .back-button-secondary:hover {
             background-color: #007B9A;
         }
         footer {
@@ -83,11 +72,27 @@
             position: relative;
             z-index: 1;
         }
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            th, td {
+                font-size: 0.9em;
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>มาตรการคำนวณยา Small Dose<br>ศูนย์เด็กอ่อนและ NICU<br>1 ตุลาคม 2550</h1>
 
+    <div style="overflow-x: auto;">
     <table>
         <tr>
             <th>ชื่อยา</th>
@@ -160,7 +165,8 @@
             <td>25 mg = 100 u<br>1 mg = 4 u</td>
         </tr>
     </table>
-
+    </div>
+    
     <p class="note">ข้อมูลมาตรการคำนวณยาเด็ก NICU ประจำวันที่ 1 ตุลาคม 2550</p>
     <div class="button-group">
         <a href="javascript:history.back()" class="back-button-secondary">Back</a>
