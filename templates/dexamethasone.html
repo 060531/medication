@@ -17,28 +17,29 @@
             background-attachment: fixed;
         }
 
+
         /* กรอบสีเหลืองออกครีม (#F6C8B6) */
         .container {
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 2px solid #e8cabe;
+            border: 2px solid #007bbe;
             border-radius: 10px;
-            background-color: rgba(246, 200, 182, 0.9); /* สีพื้นหลังพร้อมความโปร่งใส */
+            background-color: rgba(96, 179, 218, 0.633); /* สีพื้นหลังพร้อมความโปร่งใส */
             z-index: 0;
             position: relative;
         }
 
         /* กรอบและการเน้นข้อความสำหรับ h2 */
         h2 {
-            color: #d32f2f;
+            color: hsl(240, 5%, 96%);
             font-size: 28px;
             font-weight: bold;
             padding: 10px;
-            border: 2px solid #d32f2f; /* เพิ่มกรอบสีแดงเข้ม */
+            border: 2px solid #7b9adb; /* เพิ่มกรอบสีแดงเข้ม */
             border-radius: 10px;
             display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
-            background-color: #ffeb3b; /* พื้นหลังสีเหลือง */
+            background-color: #00178c; /* พื้นหลังสีเหลือง */
         }
 
         .form-group {
@@ -52,7 +53,7 @@
         }
 
         .form-group input, .form-group select {
-            width: 100%;
+            width: 20%;
             padding: 8px;
             margin-top: 5px;
             border: 1px solid #ccc;
@@ -61,11 +62,21 @@
         }
 
         .result {
-            margin-top: 20px;
+            margin-top: 10px;
             padding: 15px;
             background-color: #f0f0f0;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 16px;
+            margin-bottom: 10px; /* ลดระยะห่างด้านล่างของ div */
+        }
+
+        .result p {
+            margin: 5px 0; /* ลดระยะห่างด้านบนและล่างของแต่ละบรรทัด */
+            line-height: 1.2; /* ปรับความสูงของบรรทัด */
+        }
+
+        .left-align {
+            text-align: left; /* จัดข้อความชิดซ้าย */
         }
 
         .blue-box {
@@ -130,7 +141,7 @@
 
         /* กรอบสำหรับข้อความที่ต้องการให้โดดเด่น */
         .highlight-box {
-            background-color: #ffeb3b; /* สีพื้นหลังเหลือง */
+            background-color: #2960f6; /* สีพื้นหลังเหลือง */
             font-weight: bold;
             padding: 10px;
             text-align: center;
@@ -147,11 +158,92 @@
             border: 2px solid #b3e5fc;
             padding: 15px;
             border-radius: 10px;
-            background-color: #e1f5fe;
+            background-color: #a6b5f0a6;
             z-index: 1;
             position: relative;
         }
 
+        @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    form {
+        gap: 10px;
+    }
+
+    input, select, .calculate-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+}
+       .header {
+            font-size: 18px; /* เพิ่มขนาดข้อความ */
+            text-decoration: underline; /* เส้นใต้ */
+            text-decoration-thickness: 2px; /* ความหนาของเส้นใต้ */
+            text-decoration-line: underline double; /* เส้นใต้สองเส้น */
+        }
+
+        .list {
+            list-style-type: none; /* เอา bullet ปกติออก */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .list li::before {
+            content: "⦿ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ➢ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ➢ และข้อความ */
+        }
+
+        .item {
+            font-size: 18px; /* ขนาดข้อความ */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .item::before {
+            content: "☞ "; /* ใส่เครื่องหมาย ☞ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ☞ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ☞ และข้อความ */
+        }
+        .content {
+            line-height: 1.2; /* ลดความสูงของบรรทัด */
+        }
+
+        .content p {
+            margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+        }
+
+        .content .item {
+            margin-left: 20px; /* จัดระยะห่างซ้ายให้เป็นลำดับรอง */
+        }
+        .left-align {
+        line-height: 1.2; /* ลดความสูงระหว่างบรรทัด */
+    }
+
+    .left-align p {
+        margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+    }
+
+    .left-align ul.list {
+        margin: 5px 0; /* ลดระยะห่างระหว่างรายการ */
+        padding-left: 20px; /* เพิ่มการเยื้องให้รายการใน ul */
+    }
+
+    .left-align ul.list li {
+        margin: 3px 0; /* ลดระยะห่างระหว่างแต่ละรายการใน ul */
+    }
+        form {
+            border: 2px solid #7899ec; /* เส้นกรอบ */
+            border-radius: 10px; /* มุมโค้ง */
+            padding: 20px; /* ระยะห่างภายใน */
+            background-color: #c5d5f398; /* สีพื้นหลัง */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เงากรอบ */
+        }
+
+        
         /* ให้แน่ใจว่าฟุตเตอร์ไม่ถูกซ่อน */
         footer {
             text-align: center;
@@ -162,17 +254,12 @@
             position: relative;
             z-index: 1;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
         <h2>Dexamethasone (5mg/1ml)</h2>
-        <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
-        <div class="left-align">
-            <p><b> ขนาดยา :</b> 0.1 - 0.2 mg/kg/dose</p>
-            <p><b> Solvent :</b> Sterile water (ทำเป็น small dose) </p>
-        </div>
-        
+    <div class="container">
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
@@ -183,12 +270,44 @@
 <div class="result">
     <p><b>Order :</b> Dexamethasone {{ dose }} mg </p>
     <div class="result left-align">
-<p><b>วิธีเตรียม : </b>Sterile water 80 u + ยา 1 mg (20 u)</p>
+<p><b>วิธีเตรียม : </b>Sterile water 80 u + ยา 20 u (1 mg)</p>
 <p><b>ขนาดยา : </b>{{ dose }} mg = {{ (dose * 100) | int }} u</p>
 </div>
 </div>
 {% endif %}
 
+        <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
+        <div class="left-align">
+            <p class="item"><b>ขนาดยา : </b> 0.1 - 0.2 mg/kg/dose</p>
+            <p class="header"><b>Solvent</b></p>
+        <ul class="list">
+            <li>ยาอยู่ในรูปแบบสารละลายใส ไม่มีสี</li>
+            <li><u>ความแรง 5 mg/ml</u></li>
+        </ul>
+        <p class="header"><b>Solution /Small dose</b></p>
+        <ul class="list">
+            <li>ยา 0.2 ml + D5W up to 1 ml</li>
+            <li><u>1 mg/ml</u></li>
+        </ul>
+        <p class="header"><b>ความเข้มข้นสูงสุดในการบริหารยา</b></p>
+        <ul class="list">
+            <li>&le; 1 mg/ml.</li>
+        </ul>
+        <p class="header"><b>ระยะเวลาในการบริหารยา</b></p>
+        <ul class="list">
+            <li>Slow push 3 - 5 mins</li>
+        </ul>
+        <p class="header"><b>ความคงตัวหลังเจือจาง</b></p>
+        <ul class="list">
+            <li>ทิ้งส่วนที่เหลือหลังเปิดใช้</li>
+        </ul>
+            <p class="header"><b>ข้อควรระวัง/การติดตาม เพื่อป้องกัน Type A ADR</b></p>
+        <ul class="list">
+            <li>Hemoglobin</li>
+            <li>Serum potassium</li>
+            <li>DTX</li>
+        </ul>
+        </div>
     </div>
     <div class="button-group">
         <a href="javascript:history.back()" class="back-button-secondary">Back</a>
