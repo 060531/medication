@@ -31,14 +31,14 @@
 
         /* กรอบและการเน้นข้อความสำหรับ h2 */
         h2 {
-            color: #d32f2f;
+            color: hsl(240, 5%, 96%);
             font-size: 28px;
             font-weight: bold;
             padding: 10px;
-            border: 2px solid #d32f2f; /* เพิ่มกรอบสีแดงเข้ม */
+            border: 2px solid #7b9adb; /* เพิ่มกรอบสีแดงเข้ม */
             border-radius: 10px;
             display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
-            background-color: #ffeb3b; /* พื้นหลังสีเหลือง */
+            background-color: #00178c; /* พื้นหลังสีเหลือง */
         }
 
         .form-group {
@@ -196,7 +196,7 @@
         }
 
         .list li::before {
-            content: "➢ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
+            content: "⦿ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
             font-size: 18px; /* ขนาดของเครื่องหมาย ➢ */
             margin-right: 5px; /* ระยะห่างระหว่าง ➢ และข้อความ */
         }
@@ -286,8 +286,8 @@
         <!-- Display second method result -->
         <div class="result">
             <div class="left-align">
-                <p><b>ขั้นตอนที่ 2:คำนวณปริมาณสารละลาย(5mg/ml)</b></p>
-                <p>ใช้สูตร: ({{ dose }}  × 1) / 5 = {{ result_ml_2 }} ml</p>
+                <p><b>ขั้นตอนที่ 2:คำนวณปริมาณสารละลาย(7mg/ml)</b></p>
+                <p>ใช้สูตร: ({{ dose }}  × 1) / 7 = {{ result_ml_2 }} ml</p>
             </div>
         </div>
         {% endif %}
@@ -332,9 +332,34 @@
 
         <div class="left-align">
             <p class="item"><b>ขนาดยา : </b> 10 mg/kg/dose</p>
-            <p class="item"><b>Solvent : </b> Sterile water <b>(**ยาคงตัวอยู่ได้ 12 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C**)</b> หรือ 5%Dextrose <b>(**ยาคงตัวอยู่ได้ 24 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C**)</b></p>
-            <p class="item"><b>การติดตาม : </b> ตรวจสอบการทำงานของตับ และไต</p>
-            <p class="item"><b>ความเข้มข้น : </b> 5 mg/ml.</p>
+            <p class="header"><b>Solvent</b></p>
+        <ul class="list">
+            <li><b>Sterile water 5 ml</b></li>
+            <li>จะได้สารละลายใส ไม่มีสี</li>
+            <li><u>ความแรง 50 mg/ml</u></li>
+        </ul>
+        <p class="header"><b>Solution</b></p>
+        <ul class="list">
+            <li>0.9% Normal saline solution/NSS</li>
+            <li>5% Dextrose in water</li>
+        </ul>
+        <p class="header"><b>ความเข้มข้นสูงสุดในการบริหารยา</b></p>
+        <ul class="list">
+            <li>&le; 7 mg/ml.</li>
+        </ul>
+        <p class="header"><b>ระยะเวลาในการบริหารยา</b></p>
+        <ul class="list">
+            <li>&gt; 60 mins</li>
+        </ul>
+        <p class="header"><b>ความคงตัวหลังเจือจาง</b></p>
+        <ul class="list">
+            <li>24 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C</li>
+        </ul>
+            <p class="header"><b>ข้อควรระวัง/การติดตาม เพื่อป้องกัน Type A ADR</b></p>
+        <ul class="list">
+            <li>ระวัง Extravasation</li>
+            <li>Liver function</li>
+        </ul>
         </div>
     </div>
     
