@@ -162,24 +162,19 @@
         }
 
         @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
     form {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 10px; /* เพิ่มระยะห่างระหว่างช่อง input และปุ่ม */
+        gap: 10px;
     }
 
-    input[type="number"] {
-    width: 200px; /* กำหนดความกว้างตามต้องการ */
-    height: 40px; /* กำหนดความสูงตามต้องการ */
-}
-
-
-    .calculate-button {
-        padding: 8px 16px; /* ลดขนาดปุ่มให้พอดีกับช่อง input */
-        font-size: 10px; /* ลดขนาดตัวอักษรของปุ่ม */
+    input, select, .calculate-button {
+        font-size: 14px;
+        padding: 8px;
     }
+
 }
        .header {
             font-size: 18px; /* เพิ่มขนาดข้อความ */
@@ -195,7 +190,7 @@
         }
 
         .list li::before {
-            content: "➢ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
+            content: "⦿ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
             font-size: 18px; /* ขนาดของเครื่องหมาย ➢ */
             margin-right: 5px; /* ระยะห่างระหว่าง ➢ และข้อความ */
         }
@@ -335,15 +330,35 @@
             </div>
     {% endif %}
 
-        <div class="left-align">
-            <p class="item"><b>การละลายยา : </b> ยาอยู่ในรูปแบบสารละลายใส ไม่มีสี ความแรง 150 mg/ml </p>
-            <p class="item"><b>Solvent : </b> Normal saline solution หรือ 5% Dextrose in water </p>
-            <p class="item"><b>ความเข้มข้นสูงสุดในการบริหารยา : </b> &le; 6 mg/ml.</p>
-            <p class="item"><b>ระยะเวลาในการบริหารยา : </b> 30 - 60 mins </p>
-            <p class="item"><b>ความคงตัวหลังเจือจาง : </b> 24 ชั่วโมง ที่อุณหภูมิห้อง</p>
-            <p class="item"><b>ข้อความระวัง/การติดตามเพื่อป้องกัน Type A ADR : </b> Anaphylaxis ระหว่างการให้ครั้งแรก </p>
-        </div>    
-    
+            <div class="left-align">
+            <p class="header"><b>Solvent</b></p>
+        <ul class="list">
+            <li><b>Sterile water 5 ml</b></li>
+            <li>จะได้สารละลายใส ไม่มีสี</li>
+            <li><u>ความแรง 150 mg/ml</u></li>
+        </ul>
+        <p class="header"><b>Solution</b></p>
+        <ul class="list">
+            <li>0.9% Normal saline solution/NSS</li>
+            <li>5% Dextrose in water</li>
+        </ul>
+        <p class="header"><b>ความเข้มข้นสูงสุดในการบริหารยา</b></p>
+        <ul class="list">
+            <li>&le; 6 mg/ml</li>
+        </ul>
+        <p class="header"><b>ระยะเวลาในการบริหารยา</b></p>
+        <ul class="list">
+            <li>30 - 60 mins</li>
+        </ul>
+        <p class="header"><b>ความคงตัวหลังเจือจาง</b></p>
+        <ul class="list">
+            <li>24 ชั่วโมง ที่อุณหภูมิห้อง 15 - 25 ° C</li>
+        </ul>
+            <p class="header"><b>ข้อควรระวัง/การติดตาม เพื่อป้องกัน Type A ADR</b></p>
+        <ul class="list">
+            <li>Anaphylaxis ระหว่างการให้ครั้งแรก</li>
+        </ul>
+        </div>
     </div>
 
     <div class="button-group">
