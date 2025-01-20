@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Hydrocortisone Calculation</title>
+    <title>Metronidazole Calculation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -257,53 +257,43 @@
     </style>
 </head>
 <body>
-       <h2>Hydrocortisone (100mg/Vial)</h2>
-    <div class="container">      
-        <form method="POST" action="/hydrocortisone">
+    <h2>Metronidazole 500 mg/100 ml</h2>
+        <div class="container">
+
+        <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
-            <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
-            <button type="submit" class="calculate-button" style="margin-top: 20px;">Calculate</button>
+            <input type="number" name="dose" placeholder="ขนาดยา (mg)" required value="{{ dose }}">
+            <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
         </form>
 
         {% if dose %}
         <div class="result">
-            <p><b>Order :</b> Hydrocortisone {{ dose }} mg</p>
-            {% if dose <= 25 %}
-            <div class="result left-align">
-                <p><b>วิธีเตรียม :</b> 5%dextrose in water 50 u + ยา 50 u (25 mg/ml)</p>
-                <p><b>ขนาดยา :</b> {{ dose }} mg = {{ (dose * 4) | int }} u</p>
+            <p><b>Order :</b> Metronidazole {{ dose | int }} mg</p>
+            <div class="left-align">
+                <p><b>วิธีคิด:</b></p>
+                <p><b>ขนาดยา :</b> {{ dose | int }} mg × 100 ml /500 mg = {{ ((dose * 100) / 500) | round(2) }} ml</p>
+                <p><b>ดังนั้น, ขนาดยา</b> {{ dose | int }} mg = {{ ((dose * 100) / 500) | round(2) }} ml</p>
             </div>
-            {% else %}
-            <div class="result left-align">
-                <p><b>วิธีเตรียม :</b> 5%dextrose in water 1 ml + ยา 1 ml (50 mg/ml)</p>
-                <p><b>ขนาดยา :</b> {{ dose }} mg = {{ ((dose * 4) / 100) | round(2) }} ml</p>
-
-            </div>
-            {% endif %}
         </div>
         {% endif %}
-
-    
-            <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
-            <div class="left-align">
-            <p class="item"><b>ขนาดยา : </b> 5 mg/kg/dose</p>
+                <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
+                <div class="left-align">
             <p class="header"><b>Solvent</b></p>
         <ul class="list">
-            <li> Sterile water 2 ml</li>
-            <li>ได้สารละลายใส ไม่มีสี 2 ml</li>
-            <li><u>ความแรง 50 mg/ml</u></li>
+            <li>ยาอยู่ในรูปแบบ Solution</li>
+            <li><u>ความแรง 5 mg/ml</u></li>
         </ul>
         <p class="header"><b>Solution</b></p>
         <ul class="list">
-            <li>5% Dextrose in water 50 u + ยา 50 u (25 mg/ml)</li>
+            <li>สามารถให้โดยตรงไม่ต้องเจือจาง</li>
         </ul>
         <p class="header"><b>ความเข้มข้นสูงสุดในการบริหารยา</b></p>
         <ul class="list">
-            <li>1 - 10 mg/ml.</li>
+            <li>&le; 8 mg/ml.</li>
         </ul>
         <p class="header"><b>ระยะเวลาในการบริหารยา</b></p>
         <ul class="list">
-            <li> 30 - 60 mins</li>
+            <li>30 mins</li>
         </ul>
         <p class="header"><b>ความคงตัวหลังเจือจาง</b></p>
         <ul class="list">
@@ -311,12 +301,11 @@
         </ul>
             <p class="header"><b>ข้อควรระวัง/การติดตาม เพื่อป้องกัน Type A ADR</b></p>
         <ul class="list">
-            <li>BP , BW , DTX</li>
-            <li>Elactrolyte</li>
+            <li>Liver function</li>
+            <li>Anaphylaxis ระหว่างการให้ครั้งแรก</li>
         </ul>
         </div>
-</div> <!-- ปิด container -->
-
+    </div>
     <div class="button-group">
         <a href="javascript:history.back()" class="back-button-secondary">Back</a>
         <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>

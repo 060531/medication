@@ -15,6 +15,7 @@ def inject_update_date():
 
 @app.route('/')
 def index():
+    print(app.url_map)  # Print all routes to debug
     return render_template('index.html', update_date=UPDATE_DATE)
 
 
@@ -605,15 +606,23 @@ def hydrocortisone_route():
     dose = None
     result_ml = None
     error = None
-    
-    if request.method == 'POST':
-        try:
-            dose = float(request.form['dose'])
-            result_ml = dose * 4  # ตัวอย่างการคำนวณ
-        except ValueError:
-            error = "กรุณากรอกขนาดยาที่ถูกต้อง"
-    
-    return render_template('hydrocortisone.html', dose=dose, result_ml=result_ml, error=error, update_date=UPDATE_DATE)
+
+    try:
+        if request.method == 'POST':
+            dose = float(request.form.get('dose', 0))  # Get dose from form
+            # Perform calculation for result_ml (example logic)
+            result_ml = dose / 50  # Replace with your logic
+    except ValueError:
+        error = "Invalid input for dose."
+
+    # Render the template with variables
+    return render_template(
+        'hydrocortisone.html',
+        dose=dose,
+        result_ml=result_ml,
+        error=error,
+        update_date=UPDATE_DATE  # Use the global UPDATE_DATE
+    )
 
 @app.route('/insulin', methods=['GET', 'POST'])
 def insulin_route():
@@ -684,6 +693,30 @@ def meropenam_route():
             error = f"กรุณาใส่ข้อมูลที่ถูกต้อง: {str(e)}"
 
     return render_template('meropenam.html', dose=dose, result_ml=result_ml, final_result=final_result, multiplication=multiplication, content_extra=content_extra, formula_display=formula_display, error=error, update_date=UPDATE_DATE)
+
+
+@app.route('/metronidazole', methods=['GET', 'POST'])
+def metronidazole():
+    dose = None
+    calculated_ml = None
+    if request.method == 'POST':
+        try:
+            # Get dose value from the form
+            dose = float(request.form.get('dose', 0))
+            # Perform calculation: (dose * 100) / 500
+            calculated_ml = round((dose * 100) / 500, 2)
+        except ValueError:
+            # Handle invalid input
+            dose = None
+            calculated_ml = None
+
+    # Render the template with all required variables
+    return render_template(
+        'metronidazole.html',  # Your HTML template
+        dose=dose,
+        calculated_ml=calculated_ml,
+        update_date=UPDATE_DATE
+    )
 
 @app.route('/midazolam_fentanyl', methods=['GET', 'POST'])
 def midazolam_fentanyl_route():
@@ -791,6 +824,61 @@ def nimbex_route():
             error = f"กรุณาใส่ข้อมูลที่ถูกต้อง: {str(e)}"
 
     return render_template('nimbex.html', dose=dose, result_ml=result_ml, final_ml=final_ml, error=error, update_date=UPDATE_DATE)
+
+
+@app.route('/omeprazole', methods=['GET', 'POST'])
+def omeprazole_route():
+    dose = None
+    result_ml = None
+    final_result = None
+    multiplication = None
+    error = None
+    formula_display = None
+    content_extra = None
+
+    if request.method == 'POST':
+        try:
+            dose = float(request.form['dose'])
+            multiplication = int(request.form['multiplication'])
+            result_ml = round((dose * 10) / 40, 2)
+
+            final_result = round(result_ml * multiplication, 2)
+
+            if multiplication == 3:
+                content_extra = {
+                    "message": "การบริหารยาโดย Intermittent intravenous infusion pump",
+                    "details": [
+                        "สำหรับทารกที่มีน้ำหนักมากกว่า 1,500 กรัม",
+                        "กำหนดให้ปริมาณสารละลายยา (ปริมาณยา + สารละลายเชื้อจางยา) = 8 ml.",
+                        "(ความจุของ Extension Tube ประมาณ 5 ml. + Volume ที่ต้องบริหารเข้าผู้ป่วย 3 ml.)",
+                        "<div style='text-align: center;'>(3X + สารละลายเจือจางยา Up to 9 ml.)</div>",
+                        "การเตรียมยา:",
+                        "1. คำนวณปริมาณยาที่ต้องการใช้เป็นมิลลิลิตร (ml.) แทนค่าในสูตร",
+                        "2. ใช้ Syringe ขนาดที่เหมาะสม ดูดปริมาณยาที่ต้องการเตรียมไว้",
+                        "3. ใช้ Syringe ขนาด 10 ml. หรือ 20 ml. ดูดปริมาณสารละลายเชื้อจางยาเตรียมไว้",
+                        "4. ผสมยาใน Syringe ที่มีสารละลายเชื้อจางยาอยู่ Mixed ให้เข้ากัน",
+                        "5. ต่อ Syringe กับ Extension Tube นำไปวางบน Syringe pump กด Start ตั้งอัตราเร็ว 6 ml/hr.",
+                        "6. Purge ยาให้ทั่วท่อโดยการดัน Syringe 3 ml. แล้วจึงบริหารผู้ป่วย",
+                    ]
+                }
+
+            elif multiplication == 6:
+                content_extra = {
+                    "message": "การบริหารยาโดย Intermittent intravenous infusion.",
+                    "details": [
+                        "สำหรับทารกที่มีน้ำหนักน้อยกว่า 1,500 กรัม",
+                        "1. กำหนดให้สารละลายยาซึ่งบริหารเข้าสู่ผู้ป่วยปริมาณเท่ากับ 1 ml.",
+                        "2. ให้ X คือ ปริมาณยาที่ต้องการเตรียม กำหนดสูตรในการเตรียมสารละลายยา ดังนี้:",
+                        "<div style='text-align: center;'>6X + สารละลายเจือจางยา Up to 6 ml.</div>"
+                        "3. จากข้อ 2 จะได้สารละลายทั้งหมด 6 ml. ซึ่งหมายถึง ความจุของ Extension Tube ประมาณ 5 ml. + Volume ที่ต้องการบริหารเข้าสู่ผู้ป่วย 1 ml.",
+                        "4. บริหารยาโดยใช้ Syringe pump ตั้งอัตราเร็ว 2 ml/hr.",
+                    ]
+                }
+
+        except (ValueError, KeyError) as e:
+            error = f"กรุณาใส่ข้อมูลที่ถูกต้อง: {str(e)}"
+
+    return render_template('omeprazole.html', dose=dose, result_ml=result_ml, final_result=final_result, multiplication=multiplication, content_extra=content_extra, formula_display=formula_display, error=error, update_date=UPDATE_DATE)
 
 @app.route('/phenobarbital', methods=['GET'])
 def phenobarbital_route():
