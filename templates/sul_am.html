@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Vancomycin Calculation</title>
+    <title>Sul-amⓇ Calculation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -257,93 +257,93 @@
     </style>
 </head>
 <body>
-        <!-- Vancomycin Section -->
-        <h2>Vancomycin 500mg/Vial</h2>
-            <div class="container">
-        <div class="left-align">
-        
-        <!-- Form for entering the dose for Vancomycin -->
+        <h2>Sul-amⓇ (3 G/Vial)<br>(Ampicillin 2 G และ Sulbactam 1 G)</h2>
+        <div class="container">      
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
-            <input type="number" name="dose" placeholder="ขนาดยา (mg)" required value="{{ dose }}">
+            <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
             
-            <!-- Field for selecting concentration (5mg/ml or 7mg/ml) -->
-            <label for="concentration"><b>เลือกระดับความเข้มข้น:</b></label>
-            <select name="concentration" required>
-                <option value="5">5 mg/ml</option>
-                <option value="10">10 mg/ml</option>
+            <label for="multiplication" style="margin-top: 15px;"><b>เลือกเงื่อนไข (3 เท่าหรือ 6 เท่า):</b></label>
+            <select name="multiplication" required>
+                <option value="3">3 เท่า</option>
+                <option value="6">6 เท่า</option>
             </select>
-
+        
             <!-- Add some margin above the button -->
             <button type="submit" class="calculate-button" style="margin-top: 20px;">Calculate</button>
         </form>
-
-        {% if result_ml_1 %}
-        <!-- Display result after first method calculation -->
+        
+        {% if dose %}
         <div class="result">
-            <p><b>Order: Vancomycin {{ dose }} mg </b></p>
+            <p><b>Order :</b> Sul-amⓇ {{ '%.2f' | format(dose) }} mg</p>
             <div class="left-align">
-                <p><b>ขั้นตอนที่ 1:คำนวณปริมาณยา (500mg/10ml)</b></p>
-                <p>ใช้สูตร: ({{ dose }}  × 10) / 500 = {{ result_ml_1 }} ml</p>
+            <p><b>วิธีคิด:</b> {{ '%.2f' | format(dose) }} mg × 8 ml / 3000 mg = {{ ((dose * 8) / 3000) | round(2) }} ml</p>
+            <p><b>ดังนั้น: ขนาดยา</b> {{ '%.2f' | format(dose) }} mg = {{ ((dose * 8) / 3000) | round(2) }} ml</p>
             </div>
         </div>
         {% endif %}
 
-        {% if result_ml_2 %}
-        <!-- Display result after second method calculation -->
+        {% if final_result %}
         <div class="result">
-            <div class="left-align">
-                <p><b>ขั้นตอนที่ 2:คำนวณปริมาณสารละลาย ({{ concentration | int }}mg/ml)</b></p>
-                <p>ใช้สูตร: ({{ dose }}  × 1) / {{ concentration | int }} = {{ result_ml_2 }} ml</p>
+            <p><b>ผลลัพธ์หลังจากคูณ {{ multiplication }} เท่า = {{ '%.2f' | format(result_ml * multiplication) }} ml</b></p>
+          <div class="left-align">
+            {% if multiplication == 3 and final_result < 9 %}
+                <p><b>ดังนั้น สารละลายที่ต้องผสม :</b> (9 - {{ '%.2f' | format(result_ml * multiplication) }}) = {{ '%.2f' | format(9 - (result_ml * multiplication)) }} ml</p>
+            {% elif multiplication == 3 and final_result >= 9 %}
+                <p><b>**ดูดยา​ : 9 ml ไม่ต้องผสมสารละลาย**</b></p>
+            {% endif %}
+            {% if multiplication == 3 %}
+                <p><b>ปริมาณยาที่บริหารเข้าทารก = 3 ml >> ตั้งอัตราเร็ว 6 ml/hr.</b></p>
+            {% endif %}
+    
+            {% if multiplication == 6 and final_result < 6 %}
+                <p><b>ดังนั้น สารละลายที่ต้องผสม :</b> (6 - {{ '%.2f' | format(result_ml * multiplication) }}) = {{ '%.2f' | format(6 - (result_ml * multiplication)) }} ml</p>
+            {% elif multiplication == 6 and final_result >= 6 %}
+                <p><b>**ดูดยา​ : 6 ml ไม่ต้องผสมสารละลาย**</b></p>
+            {% endif %}
+            {% if multiplication == 6 %}
+                <p><b>ปริมาณยาที่บริหารเข้าทารก = 1 ml >> ตั้งอัตราเร็ว 2 ml/hr.</b></p>
+            {% endif %}
             </div>
         </div>
-        {% endif %}
-
-        <!-- Second form to calculate multiplication -->
-        {% if result_ml_1 or result_ml_2 %}
-        <form method="POST">
-            <input type="hidden" name="dose" value="{{ dose }}">
-            <input type="hidden" name="concentration" value="{{ concentration }}">
-            <label for="multiplication">เลือกเงื่อนไข:</label>
-            <select name="multiplication" required>
-                <option value="1.5">1.5 เท่า</option>
-                <option value="2">2 เท่า</option>
-                <option value="2.5">2.5 เท่า</option>
-                <option value="3">3 เท่า</option>
-                <option value="3.5">3.5 เท่า</option>
-                <option value="4">4 เท่า</option>
-                <option value="4.5">4.5 เท่า</option>
-                <option value="5">5 เท่า</option>
-            </select>
-            <button type="submit" class="calculate-button" name="calculate_multiplication">คำนวณการคูณ</button>
-        </form>
-        {% endif %}
-
-        {% if final_result_1 is not none and final_result_2 is not none %}
-        <!-- Display final result after multiplication -->
-        <div class="result">
-            <p><b>ผลลัพธ์หลังจากคูณ {{ multiplication }} เท่า</b></p>
-            <div class="result left-align">
-                <p>{{ multiplication }} × {{ result_ml_1 }} ml = {{ final_result_1 }} ml (จากสูตร: ({{ dose }}  × 10) / 500)</p>
-                <p>{{ multiplication }} × {{ result_ml_2 }} ml = {{ final_result_2 }} ml (จากสูตร: ({{ dose }}  × 1) / {{ concentration | int }})</p>
-            
-                <!-- Additional calculation result -->
-                <p><b>ปริมาณยา : {{ final_result_1 }} ml</b></p>
-                <p><b>ปริมาณสารละลาย : {{ final_result_2 | round(2) }} ml - {{ final_result_1 | round(2) }} ml = {{ (final_result_2 - final_result_1) | round(2) }} ml</b></p>
-
-                <!-- Amount administered to patient -->
-                <p><b>ปริมาณยาที่บริหารเข้าทารก = {{ result_ml_2 }} ml  >> drip in 1 hr.</b></p>
-            </div>            
+    {% endif %}
+    
+    {% if content_extra %}
+    <div class="extra-content" style="border: 2px solid #b3e5fc; padding: 15px; border-radius: 10px; background-color: #e1f5fe;">
+        <p style="font-weight: bold; text-align: center;">{{ content_extra.message }}</p>
+        <div>
+            {% for detail in content_extra.details %}
+                {% if "3X + สารละลายเจือจางยา Up to 9 ml." in detail %}
+                <!-- ทำให้ข้อความ Step 3 โดดเด่นขึ้น -->
+                <div class="highlight-box">
+                    {{ detail | safe }}
+                </div>
+                {% elif "6X + สารละลายเจือจางยา Up to 6 ml." in detail %}
+                <!-- ทำให้ข้อความ Step 4 โดดเด่นขึ้น -->
+                <div class="highlight-box">
+                    {{ detail | safe }}
+                </div>
+                {% else %}
+                <p style="text-align: left;">{{ detail }}</p>  <!-- ทำให้เนื้อหาอื่นๆ ชิดซ้ายทั้งหมด -->
+                {% endif %}
+            {% endfor %}
         </div>
-        {% endif %}
-
-<!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
+    </div>
+    {% endif %}
+    
+    {% if error %}
+    <div class="error" style="color: red;">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    
+        <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
                 <div class="left-align">
             <p class="header"><b>Solvent</b></p>
         <ul class="list">
-            <li>Sterile water 10 ml</li>
-            <li>ได้สารละลายยา 10 ml</li>
-            <li><u>ความแรง 50 mg/ml</u></li>
+            <li>Sterile water 6.4 ml</li>
+            <li>ได้สารละลายยา ไม่มีสี 8 ml</li>
+            <li><u>ความแรง 375 mg/ml</u></li>
         </ul>
         <p class="header"><b>Solution</b></p>
         <ul class="list">
@@ -352,22 +352,21 @@
         </ul>
         <p class="header"><b>ความเข้มข้นสูงสุดในการบริหารยา</b></p>
         <ul class="list">
-            <li>&#8804; 5 mg/ml(กรณีจำกัดน้ำ &#8804; 10 mg/ml)</li>
+            <li>&#8804; 30 mg/ml</li>
         </ul>
         <p class="header"><b>ระยะเวลาในการบริหารยา</b></p>
         <ul class="list">
-            <li>2 ชั่วโมง</li>
+            <li>3 ชั่วโมง</li>
         </ul>
         <p class="header"><b>ความคงตัวหลังเจือจาง</b></p>
         <ul class="list">
-            <li>7 วัน ที่ 2 - 8 °C</li>
+            <li>24 ชั่วโมง ที่ 2 - 8 °C</li>
         </ul>
             <p class="header"><b>ข้อควรระวัง/การติดตาม เพื่อป้องกัน Type A ADR</b></p>
         <ul class="list">
-            <li>หากเกิด <u>Red man syndrome</u> เพิ่มเวลาเป็น 4 ชั่วโมง</li>
-            <li>CBC ,WBC , Renal function</li>
+            <li>Liver function</li>
+            <li>Anaphylaxis ระหว่างการให้ครั้งแรก</li>
         </ul>
-        <p class="item"><b>Half-life : </b> 6 hrs.</p>
         </div>
         </div>
     </div> <!-- ปิด container -->

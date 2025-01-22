@@ -880,6 +880,35 @@ def omeprazole_route():
 
     return render_template('omeprazole.html', dose=dose, result_ml=result_ml, final_result=final_result, multiplication=multiplication, content_extra=content_extra, formula_display=formula_display, error=error, update_date=UPDATE_DATE)
 
+
+
+@app.route('/penicillin', methods=['GET', 'POST'])
+def penicillin_g_sodium_route():
+    dose = None
+    calculated_ml = None
+    error = None
+
+    if request.method == 'POST':
+        try:
+            # Get dose from form input
+            dose = float(request.form.get('dose', 0))
+            # Calculate the volume
+            calculated_ml = round((dose * 10) / 500000, 2)
+        except ValueError:
+            # Handle invalid inputs
+            error = "กรุณากรอกข้อมูลที่ถูกต้อง"
+
+    return render_template(
+        'penicillin_g_sodium.html',
+        dose=dose,
+        calculated_ml=calculated_ml,
+        error=error,
+        update_date=UPDATE_DATE
+    )
+
+
+
+
 @app.route('/phenobarbital', methods=['GET'])
 def phenobarbital_route():
     return render_template('phenobarbital.html', update_date=UPDATE_DATE)
@@ -926,6 +955,73 @@ def remdsivir_route():
 
     return render_template('remdsivir.html', dose=dose, result_ml_1=result_ml_1, result_ml_2=result_ml_2, final_result_1=final_result_1, final_result_2=final_result_2, multiplication=multiplication, error=error, update_date=UPDATE_DATE)
 
+@app.route('/sul-am', methods=['GET', 'POST'])
+def sul_am_route():
+    dose = None
+    multiplication = None
+    result_ml = None
+    final_result = None
+    content_extra = None
+    error = None
+
+    if request.method == 'POST':
+        try:
+            # Get the dose and multiplication values from the form input
+            dose = float(request.form.get('dose', 0))
+            multiplication = int(request.form.get('multiplication', 0))
+            # Calculate result_ml based on the dose
+            result_ml = round((dose * 8) / 3000, 2)
+            # Calculate the final result after multiplying by the condition
+            final_result = round(result_ml * multiplication, 2)
+
+            # Logic for content_extra based on multiplication and final_result
+            if multiplication == 3:
+                if final_result < 9:
+                    content_extra = {
+                        "message": "การบริหารยาโดย Intermittent intravenous infusion pump",
+                        "details": [
+                            f"ดังนั้น สารละลายที่ต้องผสม: (9 - {final_result}) = {round(9 - final_result, 2)} ml",
+                            "ปริมาณยาที่บริหารเข้าทารก = 3 ml >> ตั้งอัตราเร็ว 6 ml/hr."
+                        ]
+                    }
+                else:
+                    content_extra = {
+                        "message": "ดูดยา 9 ml ไม่ต้องผสมสารละลาย",
+                        "details": [
+                            "ปริมาณยาที่บริหารเข้าทารก = 3 ml >> ตั้งอัตราเร็ว 6 ml/hr."
+                        ]
+                    }
+            elif multiplication == 6:
+                if final_result < 6:
+                    content_extra = {
+                        "message": "การบริหารยาโดย Intermittent intravenous infusion",
+                        "details": [
+                            f"ดังนั้น สารละลายที่ต้องผสม: (6 - {final_result}) = {round(6 - final_result, 2)} ml",
+                            "ปริมาณยาที่บริหารเข้าทารก = 1 ml >> ตั้งอัตราเร็ว 2 ml/hr."
+                        ]
+                    }
+                else:
+                    content_extra = {
+                        "message": "ดูดยา 6 ml ไม่ต้องผสมสารละลาย",
+                        "details": [
+                            "ปริมาณยาที่บริหารเข้าทารก = 1 ml >> ตั้งอัตราเร็ว 2 ml/hr."
+                        ]
+                    }
+        except (ValueError, KeyError):
+            # Handle invalid inputs
+            error = "กรุณากรอกข้อมูลที่ถูกต้อง"
+
+    # Render the template with calculated results
+    return render_template(
+        'sul_am.html',
+        dose=dose,
+        result_ml=result_ml,
+        multiplication=multiplication,
+        final_result=final_result,
+        content_extra=content_extra,
+        error=error,
+        update_date=UPDATE_DATE  # Update the date as needed
+    )
 
 @app.route('/sulbactam', methods=['GET', 'POST'])
 def sulbactam_route():
@@ -941,7 +1037,7 @@ def sulbactam_route():
         try:
             dose = float(request.form['dose'])
             multiplication = int(request.form['multiplication'])
-            result_ml = round((dose * 9.2) / 2000, 2)
+            result_ml = round((dose * 8) / 2000, 2)
 
             final_result = round(result_ml * multiplication, 2)
 
@@ -995,7 +1091,7 @@ def sulperazone_route():
         try:
             dose = float(request.form['dose'])
             multiplication = int(request.form['multiplication'])
-            result_ml = round((dose / 500) * 20, 2)
+            result_ml = round((dose / 500) * 10, 2)
             final_result = result_ml * multiplication  # Calculate final_result
 
             if multiplication == 3:
@@ -1048,7 +1144,7 @@ def tazocin_route():
         try:
             dose = float(request.form['dose'])
             multiplication = int(request.form['multiplication'])
-            result_ml = round((dose * 10) / 4000, 2)
+            result_ml = round((dose * 20) / 4000, 2)
 
             final_result = round(result_ml * multiplication, 2)
 
@@ -1162,8 +1258,8 @@ def vancomycin_route():
 
             if concentration == 5:
                 result_ml_2 = round((dose * 1) / 5, 2)
-            elif concentration == 7:
-                result_ml_2 = round((dose * 1) / 7, 2)
+            elif concentration == 10:
+                result_ml_2 = round((dose * 1) / 10, 2)
 
             if 'multiplication' in request.form and request.form['multiplication']:
                 multiplication = float(request.form['multiplication'])
