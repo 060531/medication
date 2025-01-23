@@ -893,7 +893,7 @@ def penicillin_g_sodium_route():
             # Get dose from form input
             dose = float(request.form.get('dose', 0))
             # Calculate the volume
-            calculated_ml = round((dose * 10) / 500000, 2)
+            calculated_ml = round((dose * 10) / 5000000, 2)
         except ValueError:
             # Handle invalid inputs
             error = "กรุณากรอกข้อมูลที่ถูกต้อง"

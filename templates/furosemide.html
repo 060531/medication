@@ -127,8 +127,8 @@
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <!-- อนุญาตทศนิยมด้วย step="0.01" -->
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" step="0.01" required value="{{ dose }}">
-            <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
-        </form>
+            <!-- Add some margin above the button -->
+            <button type="submit" class="calculate-button" style="margin-top: 20px;">Calculate</button>
 
         {% if dose %}
 <div class="result">

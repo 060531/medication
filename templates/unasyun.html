@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Unastun Calculation</title>
+    <title>Sul-amⓇ Calculation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,28 +16,29 @@
             background-attachment: fixed;
         }
 
+
         /* กรอบสีเหลืองออกครีม (#F6C8B6) */
         .container {
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 2px solid #e8cabe;
+            border: 2px solid #007bbe;
             border-radius: 10px;
-            background-color: rgba(246, 200, 182, 0.9); /* สีพื้นหลังพร้อมความโปร่งใส */
+            background-color: rgba(96, 179, 218, 0.633); /* สีพื้นหลังพร้อมความโปร่งใส */
             z-index: 0;
             position: relative;
         }
 
         /* กรอบและการเน้นข้อความสำหรับ h2 */
         h2 {
-            color: #d32f2f;
+            color: hsl(240, 5%, 96%);
             font-size: 28px;
             font-weight: bold;
             padding: 10px;
-            border: 2px solid #d32f2f;
+            border: 2px solid #7b9adb; /* เพิ่มกรอบสีแดงเข้ม */
             border-radius: 10px;
-            display: inline-block;
-            background-color: #ffeb3b;
+            display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
+            background-color: #00178c; /* พื้นหลังสีเหลือง */
         }
 
         .form-group {
@@ -51,7 +52,7 @@
         }
 
         .form-group input, .form-group select {
-            width: 100%;
+            width: 20%;
             padding: 8px;
             margin-top: 5px;
             border: 1px solid #ccc;
@@ -60,31 +61,38 @@
         }
 
         .result {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    font-size: 18px;
-    margin-bottom: 30px; /* Add margin-bottom to space out from the next element */
-}
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px; /* ลดระยะห่างด้านล่างของ div */
+        }
 
-.extra-content {
-    border: 2px solid #b3e5fc;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #e1f5fe;
-    z-index: 1;
-    position: relative;
-    margin-top: 20px; /* Add margin-top to space out from the previous element */
-    margin-bottom: 30px; /* Add margin-bottom to ensure there's space from other content */
-}
+        .result p {
+            margin: 5px 0; /* ลดระยะห่างด้านบนและล่างของแต่ละบรรทัด */
+            line-height: 1.2; /* ปรับความสูงของบรรทัด */
+        }
 
+        .left-align {
+            text-align: left; /* จัดข้อความชิดซ้าย */
+        }
+
+        .blue-box {
+            background-color: #e0f7fa;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
 
         .button-group {
             margin-top: 20px;
             display: flex;
             justify-content: center;
             gap: 10px;
+            margin-top: 20px;
         }
 
         .back-button, .calculate-button, .back-button-secondary {
@@ -124,8 +132,15 @@
             background-color: #0056b3;
         }
 
+        .calculate-button:active {
+            background-color: #0056b3;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+        /* กรอบสำหรับข้อความที่ต้องการให้โดดเด่น */
         .highlight-box {
-            background-color: #ffeb3b;
+            background-color: #f6f329; /* สีพื้นหลังเหลือง */
             font-weight: bold;
             padding: 10px;
             text-align: center;
@@ -133,6 +148,7 @@
             margin: 15px 0;
         }
 
+        /* ทำให้ส่วนนี้ชิดขอบซ้าย */
         .left-align {
             text-align: left;
         }
@@ -141,11 +157,93 @@
             border: 2px solid #b3e5fc;
             padding: 15px;
             border-radius: 10px;
-            background-color: #e1f5fe;
+            background-color: #a6b5f0a6;
             z-index: 1;
             position: relative;
         }
 
+        @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    form {
+        gap: 10px;
+    }
+
+    input, select, .calculate-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+}
+       .header {
+            font-size: 18px; /* เพิ่มขนาดข้อความ */
+            text-decoration: underline; /* เส้นใต้ */
+            text-decoration-thickness: 2px; /* ความหนาของเส้นใต้ */
+            text-decoration-line: underline double; /* เส้นใต้สองเส้น */
+        }
+
+        .list {
+            list-style-type: none; /* เอา bullet ปกติออก */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .list li::before {
+            content: "⦿ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ➢ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ➢ และข้อความ */
+        }
+
+        .item {
+            font-size: 18px; /* ขนาดข้อความ */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .item::before {
+            content: "☞ "; /* ใส่เครื่องหมาย ☞ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ☞ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ☞ และข้อความ */
+        }
+        .content {
+            line-height: 1.2; /* ลดความสูงของบรรทัด */
+        }
+
+        .content p {
+            margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+        }
+
+        .content .item {
+            margin-left: 20px; /* จัดระยะห่างซ้ายให้เป็นลำดับรอง */
+        }
+        .left-align {
+        line-height: 1.2; /* ลดความสูงระหว่างบรรทัด */
+    }
+
+    .left-align p {
+        margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+    }
+
+    .left-align ul.list {
+        margin: 5px 0; /* ลดระยะห่างระหว่างรายการ */
+        padding-left: 20px; /* เพิ่มการเยื้องให้รายการใน ul */
+    }
+
+    .left-align ul.list li {
+        margin: 3px 0; /* ลดระยะห่างระหว่างแต่ละรายการใน ul */
+    }
+        form {
+            border: 2px solid #7899ec; /* เส้นกรอบ */
+            border-radius: 10px; /* มุมโค้ง */
+            padding: 20px; /* ระยะห่างภายใน */
+            background-color: #c5d5f398; /* สีพื้นหลัง */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เงากรอบ */
+        }
+
+        
+        /* ให้แน่ใจว่าฟุตเตอร์ไม่ถูกซ่อน */
         footer {
             text-align: center;
             margin-top: 20px;
@@ -155,19 +253,12 @@
             position: relative;
             z-index: 1;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Unasyun (ampicillin 2G + sulbactam 1G)</h2>
-        <div class="left-align">
-            <p><b>ความแรงยา :</b> 375mg/ml (Ampicillin250mg/ml และ Sulbactam125mg/ml)</p>
-            <p><b>Solvent :</b> Sterile water 6.4 ml (ได้ยารวม 3000mg/8ml)</p>
-            <p><b>Solution :</b> 5%Dextrose in water หรือ 0.9%NSS up to 10 ml</p>
-            <p><b>ยาเมื่อผสมแล้ว เก็บในตู้เย็นได้ 24 hrs.</b></p>
-            <p><b>ความคงตัวของยาหลัง dilute ด้วย 5%D/W อยู่ได้ 4 hrs.</b></p>
-        </div>
-        
+        <h2>Sul-amⓇ (3 G/Vial)<br>(Ampicillin 2 G และ Sulbactam 1 G)</h2>
+        <div class="container">      
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
@@ -178,12 +269,13 @@
                 <option value="6">6 เท่า</option>
             </select>
         
+            <!-- Add some margin above the button -->
             <button type="submit" class="calculate-button" style="margin-top: 20px;">Calculate</button>
         </form>
         
         {% if dose %}
         <div class="result">
-            <p><b>Order :</b> Unasyun {{ '%.2f' | format(dose) }} mg</p>
+            <p><b>Order :</b> Sul-amⓇ {{ '%.2f' | format(dose) }} mg</p>
             <div class="left-align">
             <p><b>วิธีคิด:</b> {{ '%.2f' | format(dose) }} mg × 8 ml / 3000 mg = {{ ((dose * 8) / 3000) | round(2) }} ml</p>
             <p><b>ดังนั้น: ขนาดยา</b> {{ '%.2f' | format(dose) }} mg = {{ ((dose * 8) / 3000) | round(2) }} ml</p>
@@ -214,37 +306,71 @@
             {% endif %}
             </div>
         </div>
-        {% endif %}
+    {% endif %}
     
-        {% if content_extra %}
-        <div class="extra-content" style="border: 2px solid #b3e5fc; padding: 15px; border-radius: 10px; background-color: #e1f5fe;">
-            <p style="font-weight: bold; text-align: center;">{{ content_extra.message }}</p>
-            <div>
-                {% for detail in content_extra.details %}
-                    {% if "3X + สารละลายเจือจางยา Up to 9 ml." in detail %}
-                    <div class="highlight-box">
-                        {{ detail | safe }}
-                    </div>
-                    {% elif "6X + สารละลายเจือจางยา Up to 6 ml." in detail %}
-                    <div class="highlight-box">
-                        {{ detail | safe }}
-                    </div>
-                    {% else %}
-                    <p style="text-align: left;">{{ detail }}</p>
-                    {% endif %}
-                {% endfor %}
-            </div>
+    {% if content_extra %}
+    <div class="extra-content" style="border: 2px solid #b3e5fc; padding: 15px; border-radius: 10px; background-color: #e1f5fe;">
+        <p style="font-weight: bold; text-align: center;">{{ content_extra.message }}</p>
+        <div>
+            {% for detail in content_extra.details %}
+                {% if "3X + สารละลายเจือจางยา Up to 9 ml." in detail %}
+                <!-- ทำให้ข้อความ Step 3 โดดเด่นขึ้น -->
+                <div class="highlight-box">
+                    {{ detail | safe }}
+                </div>
+                {% elif "6X + สารละลายเจือจางยา Up to 6 ml." in detail %}
+                <!-- ทำให้ข้อความ Step 4 โดดเด่นขึ้น -->
+                <div class="highlight-box">
+                    {{ detail | safe }}
+                </div>
+                {% else %}
+                <p style="text-align: left;">{{ detail }}</p>  <!-- ทำให้เนื้อหาอื่นๆ ชิดซ้ายทั้งหมด -->
+                {% endif %}
+            {% endfor %}
         </div>
-        {% endif %}
-    
-        {% if error %}
-        <div class="error" style="color: red;">
-            <p>{{ error }}</p>
-        </div>
-        {% endif %}
     </div>
+    {% endif %}
     
-    <!-- ปุ่มอยู่นอกกรอบสีส้ม -->
+    {% if error %}
+    <div class="error" style="color: red;">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    
+        <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
+                <div class="left-align">
+            <p class="header"><b>Solvent</b></p>
+        <ul class="list">
+            <li>Sterile water 6.4 ml</li>
+            <li>ได้สารละลายยา ไม่มีสี 8 ml</li>
+            <li><u>ความแรง 375 mg/ml</u></li>
+        </ul>
+        <p class="header"><b>Solution</b></p>
+        <ul class="list">
+            <li>0.9% Normal saline solution/NSS</li>
+            <li>5% Dextrose in water</li>
+        </ul>
+        <p class="header"><b>ความเข้มข้นสูงสุดในการบริหารยา</b></p>
+        <ul class="list">
+            <li>&#8804; 30 mg/ml</li>
+        </ul>
+        <p class="header"><b>ระยะเวลาในการบริหารยา</b></p>
+        <ul class="list">
+            <li>3 ชั่วโมง</li>
+        </ul>
+        <p class="header"><b>ความคงตัวหลังเจือจาง</b></p>
+        <ul class="list">
+            <li>24 ชั่วโมง ที่ 2 - 8 °C</li>
+        </ul>
+            <p class="header"><b>ข้อควรระวัง/การติดตาม เพื่อป้องกัน Type A ADR</b></p>
+        <ul class="list">
+            <li>Liver function</li>
+            <li>Anaphylaxis ระหว่างการให้ครั้งแรก</li>
+        </ul>
+        </div>
+        </div>
+    </div> <!-- ปิด container -->
+
     <div class="button-group">
         <a href="javascript:history.back()" class="back-button-secondary">Back</a>
         <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>

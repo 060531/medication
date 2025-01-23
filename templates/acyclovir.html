@@ -263,7 +263,8 @@
         <form method="POST">
             <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
             <input type="number" name="dose" placeholder="ขนาดยา (mg)" required value="{{ dose }}">
-            <button type="submit" class="calculate-button" style="margin-bottom: 20px;">Calculate</button>
+            <!-- Add some margin above the button -->
+            <button type="submit" class="calculate-button" style="margin-top: 20px;">Calculate</button>
         </form>
     {% if result_ml_1 %}
         <!-- Display result after dose calculation -->
