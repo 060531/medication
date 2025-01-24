@@ -273,7 +273,12 @@
             <div class="left-align">
                 <p><b>วิธีคิด:</b></p>
                 <p><b>ขนาดยา :</b> {{ dose | int }} mg × 5 ml / 1000 mg = {{ ((dose * 5) / 1000) | round(2) }} ml</p>
-                <p><b>ดังนั้น, ขนาดยา</b> {{ dose | int }} mg = {{ ((dose * 5) / 1000) | round(2) }} ml</p>
+                <p>
+                    <b><u>ดังนั้น, ขนาดยา : </u></b>{{ dose | int }} mg = 
+                    <span style="background-color: yellow; padding: 5px; border-radius: 5px;">
+                        {{ ((dose * 5) / 1000) | round(2) }} ml
+                    </span>
+                </p>
             </div>
         </div>
         {% endif %}

@@ -166,7 +166,8 @@ footer {
         <div class="container">
             <a href="{{ url_for('acyclovir_dose', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw) }}" class="medication-dose-button red-button">Acyclovir</a>
         <a href="#" class="medication-dose-button">Albumin</a>
-        <a href="#" class="medication-dose-button">Amikin</a>
+        <a href="{{ url_for('amikin_dose', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw) }}"
+   class="medication-dose-button red-button">Amikin</a>
         <a href="{{ url_for('aminophylline_dose', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw) }}" class="medication-dose-button red-button">Aminophylline</a>
 
         <a href="#" class="medication-dose-button">Amoxicillin/<br>Clavimoxy</a>

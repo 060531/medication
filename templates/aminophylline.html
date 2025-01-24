@@ -30,14 +30,14 @@
 
         /* กรอบและการเน้นข้อความสำหรับ h2 */
         h2 {
-            color: #d32f2f;
+            color: #f9f9f9;
             font-size: 28px;
             font-weight: bold;
             padding: 10px;
-            border: 2px solid #d32f2f; /* เพิ่มกรอบสีแดงเข้ม */
+            border: 2px solid #da7676; /* เพิ่มกรอบสีแดงเข้ม */
             border-radius: 10px;
             display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
-            background-color: #ffeb3b; /* พื้นหลังสีเหลือง */
+            background-color: #d82f2f; /* พื้นหลังสีเหลือง */
         }
 
         .form-group {
@@ -271,7 +271,13 @@
           <p><b>Order :</b> Aminophylline {{ dose }} mg </p>
         <div class="result left-align">
           <p><b>วิธีเตรียม : </b>5% Dextrose in water 60 u + ยา 40 u (10 mg)</p>
-          <p><b>ขนาดยาที่ใช้ : </b>{{ dose }} mg = {{ (dose * 10) | int }} u</p>
+          <p>
+            <b>ขนาดยาที่ใช้ : </b>{{ dose }} mg = 
+            <span style="background-color: yellow; padding: 5px; border-radius: 5px;">
+                {{ (dose * 10) | int }} u
+            </span>
+        </p>
+        
         </div>
         </div>
         {% endif %}

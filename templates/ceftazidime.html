@@ -140,7 +140,7 @@
 
         /* กรอบสำหรับข้อความที่ต้องการให้โดดเด่น */
         .highlight-box {
-            background-color: #2960f6; /* สีพื้นหลังเหลือง */
+            background-color: #f7ec1a; /* สีพื้นหลังเหลือง */
             font-weight: bold;
             padding: 10px;
             text-align: center;
@@ -283,7 +283,12 @@
             <p><b>Order :</b> Ceftazidime (Fortum) {{ '%.2f' | format(dose) }} mg</p>
             <div class="left-align">
             <p><b>วิธีคิด:</b> {{ '%.2f' | format(dose) }} mg × 10 ml / 1000 mg = {{ ((dose * 10) / 1000) | round(2) }} ml</p>
-            <p><b>ดังนั้น: ขนาดยา</b> {{ '%.2f' | format(dose) }} mg = {{ ((dose * 10) / 1000) | round(2) }} ml</p>
+            <p>
+                <b><u>ดังนั้น, ขนาดยา : </u></b>{{ '%.2f' | format(dose) }} mg = 
+                <span style="background-color: yellow; padding: 5px; border-radius: 5px;">
+                    {{ ((dose * 10) / 1000) | round(2) }} ml
+                </span>
+            </p>
             </div>
         </div>
         {% endif %}
@@ -298,7 +303,9 @@
                 <p><b>**ดูดยา​ : 9 ml ไม่ต้องผสมสารละลาย**</b></p>
             {% endif %}
             {% if multiplication == 3 %}
-                <p><b>ปริมาณยาที่บริหารเข้าทารก = 3 ml >> ตั้งอัตราเร็ว 6 ml/hr.</b></p>
+            <p style="background-color: rgb(241, 184, 27); padding: 5px; border-radius: 5px;">
+                <b>ปริมาณยาที่บริหารเข้าทารก = 3 ml >> ตั้งอัตราเร็ว 6 ml/hr.</b>
+            </p>
             {% endif %}
     
             {% if multiplication == 6 and final_result < 6 %}
@@ -307,7 +314,9 @@
                 <p><b>**ดูดยา​ : 6 ml ไม่ต้องผสมสารละลาย**</b></p>
             {% endif %}
             {% if multiplication == 6 %}
-                <p><b>ปริมาณยาที่บริหารเข้าทารก = 1 ml >> ตั้งอัตราเร็ว 2 ml/hr.</b></p>
+            <p style="background-color: rgb(241, 184, 27); padding: 5px; border-radius: 5px;">
+                <b>ปริมาณยาที่บริหารเข้าทารก = 1 ml >> ตั้งอัตราเร็ว 2 ml/hr.</b>
+            </p>
             {% endif %}
             </div>
         </div>

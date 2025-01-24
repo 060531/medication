@@ -1406,7 +1406,88 @@ def acyclovir_dose():
 
     # ส่งค่าไปที่ template พร้อมกับ update_date
     return render_template('acyclovir_dose.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw, dose=dose, update_date=UPDATE_DATE)
-    
+   
+
+
+
+@app.route('/amikin_dose')
+def amikin_dose():
+    # รับค่าจาก query parameters
+    pma_weeks = request.args.get('pma_weeks')
+    pma_days = request.args.get('pma_days')
+    calc = request.args.get('calc')
+    postnatal_days = request.args.get('postnatal_days')
+    bw = request.args.get('bw')
+
+    # พิมพ์ค่าที่ได้รับจาก query parameters เพื่อการตรวจสอบ
+    print(f"Received values - pma_weeks: {pma_weeks}, pma_days: {pma_days}, calc: {calc}, postnatal_days: {postnatal_days}, bw: {bw}")
+
+    # ตรวจสอบค่าที่ได้รับ
+    if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
+        return "Invalid data received - missing parameters", 400
+
+    try:
+        pma_weeks = int(pma_weeks)
+        pma_days = int(pma_days)
+        calc = float(calc)
+        postnatal_days = int(postnatal_days)
+        bw = float(bw)
+    except ValueError:
+        return "Invalid data received - value error", 400
+
+    # กำหนดค่า dose ตาม PMA และ postnatal age
+    recommended_dose_per_kg = None
+
+    # ตรวจสอบเงื่อนไขตามช่วงอายุและน้ำหนักเพื่อกำหนด dose
+    if bw <= 0.8 and postnatal_days < 14:
+        recommended_dose_per_kg = 16.0  # mg/kg
+    elif 0.8 < bw <= 1.2 and postnatal_days < 14:
+        recommended_dose_per_kg = 16.0  # mg/kg
+    elif 1.2 < bw <= 2.0 and postnatal_days < 14:
+        recommended_dose_per_kg = 15.0  # mg/kg
+    elif 2.0 < bw <= 2.8 and postnatal_days < 14:
+        recommended_dose_per_kg = 15.0  # mg/kg
+    elif bw > 2.8 and postnatal_days < 14:
+        recommended_dose_per_kg = 15.0  # mg/kg
+    elif postnatal_days >= 14:
+        # Adjust dose for older neonates
+        if bw <= 0.8:
+            recommended_dose_per_kg = 20.0  # mg/kg
+        elif 0.8 < bw <= 1.2:
+            recommended_dose_per_kg = 20.0  # mg/kg
+        elif 1.2 < bw <= 2.0:
+            recommended_dose_per_kg = 18.0  # mg/kg
+        elif 2.0 < bw <= 2.8:
+            recommended_dose_per_kg = 18.0  # mg/kg
+        elif bw > 2.8:
+            recommended_dose_per_kg = 18.0  # mg/kg
+
+    if recommended_dose_per_kg is None:
+        return "No suitable dose found for the given PMA and postnatal age", 400
+
+    # คำนวณปริมาณยาที่ควรได้รับ
+    calculated_dose = recommended_dose_per_kg * bw
+    calculated_dose = round(calculated_dose)  # ปัดเศษเป็นจำนวนเต็ม
+
+    # พิมพ์ค่า dose ที่คำนวณได้เพื่อการตรวจสอบ
+    print(f"Calculated dose: {calculated_dose} mg")
+
+    # ส่งค่าไปที่ template พร้อมกับ update_date
+    return render_template(
+    'amikin_dose.html',
+    pma_weeks=pma_weeks,
+    pma_days=pma_days,
+    calc=calc,
+    postnatal_days=postnatal_days,
+    bw=bw,
+    calculated_dose=calculated_dose,
+    update_date=UPDATE_DATE
+)
+
+
+
+
+ 
 @app.route('/aminophylline_dose')
 def aminophylline_dose():
     # รับค่าจาก query parameters
