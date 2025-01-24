@@ -792,20 +792,53 @@ def midazolam_small_dose_route():
     return render_template('midazolam_small_dose.html', dose=dose, result=result, error=error, update_date=UPDATE_DATE)
 
 
-@app.route('/morphine', methods=['GET', 'POST'])
+@app.route('/morphine', methods=['GET'])
 def morphine_route():
+    return render_template('morphine.html', update_date=UPDATE_DATE)
+
+
+@app.route('/morphine_continuous', methods=['GET', 'POST'])
+def morphine_continuous_route():
     dose = None
-    result_ml = None
+    result = None
     error = None
-    
+
     if request.method == 'POST':
         try:
-            dose = float(request.form['dose'])
-            result_ml = dose * 10  # ตัวอย่างการคำนวณ
+            dose = float(request.form['dose'])  # รับค่าขนาดยา (mg)
+            result = dose * 0.1  # ตัวอย่างการคำนวณ infusion rate
+
+        except (ValueError, KeyError) as e:
+            error = f"กรุณากรอกข้อมูลที่ถูกต้อง: {str(e)}"
+
+    return render_template('morphine_continuous.html', dose=dose, result=result, error=error, update_date=UPDATE_DATE)
+
+
+@app.route('/morphine_small_dose', methods=['GET', 'POST'])
+def morphine_small_dose_route():
+    dose = None
+    result = None
+    error = None
+
+    if request.method == 'POST':
+        try:
+            # Get the dose value from the form
+            dose = float(request.form.get('dose', 0))
+            # Perform calculations for morphine dose
+            result = round(dose * 0.1, 2)  # Example calculation
         except ValueError:
-            error = "กรุณากรอกขนาดยาที่ถูกต้อง"
-    
-    return render_template('morphine.html', dose=dose, result_ml=result_ml, error=error, update_date=UPDATE_DATE)
+            # Handle invalid inputs
+            error = "กรุณากรอกข้อมูลที่ถูกต้อง"
+
+    # Ensure dose and result are always defined
+    return render_template(
+        'morphine_small_dose.html',
+        dose=dose,
+        result=result,
+        error=error,
+        update_date=UPDATE_DATE  # Pass the update date
+    )
+
 
 @app.route('/nimbex', methods=['GET', 'POST'])
 def nimbex_route():

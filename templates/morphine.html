@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Morphine Calculation</title>
+    <title>Morphine</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,71 +16,58 @@
             background-attachment: fixed;
         }
 
-        /* กรอบสีเหลืองออกครีม (#F6C8B6) */
+        /* กรอบโปร่งใส */
         .container {
             max-width: 600px;
             margin: auto;
             padding: 20px;
-            border: 2px solid #c8ecf9;
+            border: 2px solid #e8cabe;
             border-radius: 10px;
-            background-color: rgba(187, 255, 247, 0.576); /* สีพื้นหลังพร้อมความโปร่งใส */
+            background-color: transparent; /* เปลี่ยนสีพื้นหลังเป็นโปร่งใส */
             z-index: 0;
             position: relative;
         }
 
         /* กรอบและการเน้นข้อความสำหรับ h2 */
-        h2  {
-    font-size: 1.8em; /* Adjusted font size */
-    color: #ffffff;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); /* Enhanced text shadow for more depth */
-    margin-bottom: 30px;
-    background: linear-gradient(135deg, rgb(255, 1, 1), rgb(184, 2, 2)); /* Gradient background */
-    padding: 15px 30px; /* Increase padding for a larger, more prominent header */
-    border-radius: 15px; /* Smooth, rounded corners */
-    display: inline-block;
-    border: 2px solid rgba(2, 101, 22, 0.5); /* Subtle border */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Box shadow to make it pop */
-    font-weight: bold; /* Ensuring text is bold */
-    letter-spacing: 1px; /* Slightly increase letter spacing for better readability */
-}
-
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
+        h2 {
+            color: #f9f9f9;
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-
-        .blue-box {
-            background-color: #e0f7fa;
             padding: 10px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
+            border: 2px solid #7a0909; /* เพิ่มกรอบสีแดงเข้ม */
+            border-radius: 10px;
+            display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
+            background-color: #fb3939; /* พื้นหลังสีเหลือง */
         }
 
+        .grid-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ปุ่ม */
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px); /* ปุ่มขยับขึ้นเมื่อ hover */
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3); /* เพิ่มเงาเมื่อ hover */
+        }
+
+        /* ปุ่มสำหรับส่วนอื่น ๆ */
         .button-group {
             margin-top: 20px;
             display: flex;
@@ -118,163 +105,36 @@
             background-color: #007B9A;
         }
 
-        .calculate-button {
-            background-color: #007BFF;
-        }
-
-        .calculate-button:hover {
-            background-color: #0056b3;
-        }
-
-        .calculate-button:active {
-            background-color: #0056b3;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-
-        /* กรอบสำหรับข้อความที่ต้องการให้โดดเด่น */
-        .highlight-box {
-            background-color: #ffeb3b; /* สีพื้นหลังเหลือง */
-            font-weight: bold;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
-
-        /* ทำให้ส่วนนี้ชิดขอบซ้าย */
-        .left-align {
-            text-align: left;
-        }
-
-        .extra-content {
-            border: 2px solid #b3e5fc;
-            padding: 15px;
-            border-radius: 10px;
-            background-color: #e1f5fe;
-            z-index: 1;
-            position: relative;
-        }
-
         /* ให้แน่ใจว่าฟุตเตอร์ไม่ถูกซ่อน */
         footer {
             text-align: center;
             margin-top: 20px;
-            color: rgb(255, 255, 255);
+            color: white;
             font-size: 14px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
             position: relative;
             z-index: 1;
         }
-
-/* ปรับ input และปุ่มให้แสดงผลได้ดีบนหน้าจอเล็ก */
-@media (max-width: 600px) {
-    form {
-        gap: 15px; /* เพิ่มระยะห่างระหว่างส่วนต่าง ๆ ของฟอร์มในหน้าจอเล็ก */
-    }
-
-    .calculate-button {
-        width: 100%; /* ปรับให้ปุ่มกว้างเต็มที่ในหน้าจอเล็ก */
-        margin: 0 auto; /* จัดปุ่มให้อยู่ตรงกลาง */
-    }
-
-    input {
-        width: 100%; /* ให้ input กว้างเต็มที่ */
-        padding: 10px; /* เพิ่ม padding สำหรับการแสดงผลที่ชัดเจน */
-    }
-
-    label {
-        font-size: 16px; /* ปรับขนาดตัวอักษรของ label */
-    }
-}
-
-/* ปรับการแสดงผลสำหรับหน้าจอขนาดเล็ก */
-/* ปรับสไตล์เฉพาะสำหรับหน้าจอขนาดเล็ก */
-@media (max-width: 600px) {
-    .form-group {
-        margin-bottom: 20px; /* เพิ่มระยะห่างระหว่างฟอร์มและปุ่ม */
-    }
-
-    .calculate-button {
-        width: 90%; /* ลดความกว้างของปุ่ม */
-        margin: 15px auto; /* เพิ่มระยะห่างจากปุ่มกับฟอร์ม */
-    }
-}
-
-
-    h2 {
-        font-size: 22px;
-    }
-
-    input, select {
-        font-size: 14px;
-        padding: 6px;
-    }
-
-    .form-group {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .form-group label {
-        width: 40%; /* ปรับขนาดของ label */
-    }
-
-    .form-group input, .form-group select {
-        width: 40%; /* ปรับขนาดของ input และ select */
-    }
-
-    .calculate-button, .back-button, .back-button-secondary {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    .result {
-        font-size: 14px;
-    }
-
-/* ปรับขนาดตัวอักษรใน footer เมื่อหน้าจอเล็ก */
-@media (max-width: 600px) {
-footer {
-font-size: 14px; /* ลดขนาดตัวอักษรเมื่อหน้าจอเล็ก */
-}
-}
     </style>
 </head>
 <body>
-            <h2>Morphine (10mg/ml)</h2>
+    <h2>Morphine (10 mg/ml)</h2>
             <div class="container">
-            <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
-            <div class="left-align">
-                <p><b> Solvent :</b> 0.9%NSS (ทำเป็น small dose) </p>
-                <p><b>การติดตาม :</b>  อัตราการหายใจ ,ความดันโลหิต </p>
-            </div>
-            <form method="POST">
-                <label for="dose"><b>กรอกขนาดยา (mg):</b></label>
-                <input type="number" name="dose" placeholder="ขนาดยา (mg)" required step="0.01" value="{{ dose }}">
-                <button type="submit" class="calculate-button" name="calculate_dose">Calculate Dose</button>
-            </form>
-    
-            
-            {% if dose %}
-    <div class="result">
-        <p><b>Order :</b> Morphine {{ dose }} mg </p>
-        <div class="result left-align">
-    <p><b>วิธีเตรียม : </b> 0.9%NSS 90 u + ยา 10 u </p>
-    <p><b>ขนาดยา : </b>{{ dose }} mg = {{ (dose * 100) | int }} u</p>
-    </div>
-    </div>
-    {% endif %}
-    
+        <div class="grid-container">
+            <a href="{{ url_for('morphine_continuous_route') }}" class="button">Morphine Continuous</a>
+            <a href="{{ url_for('morphine_small_dose_route') }}" class="button">Morphine Small Dose</a>
         </div>
-    <div class="button-group">
-        <a href="javascript:history.back()" class="back-button-secondary">Back</a>
-        <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
     </div>
+
+        <div class="button-group">
+            <a href="javascript:history.back()" class="back-button-secondary">Back</a>
+            <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+        </div>
 
     <footer>
         <p>Developed by Sukhontha Boonsukchan | update {{ update_date }}</p>
     </footer>
 </body>
 </html>
+
+
