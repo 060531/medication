@@ -198,6 +198,30 @@ def ampicillin_route():
     
     return render_template('ampicillin.html', dose=dose, result_ml=result_ml, error=error, update_date=UPDATE_DATE)
 
+@app.route('/benzathine-penicillin-g', methods=['GET', 'POST'])
+def benzathine_penicillin_g_route():
+    dose = None
+    calculated_ml = None
+    error = None
+
+    if request.method == 'POST':
+        try:
+            # รับค่า dose จากฟอร์มและแปลงเป็น float
+            dose = float(request.form.get('dose', 0))
+            # คำนวณปริมาณที่ต้องใช้ (ml)
+            calculated_ml = round(dose / 150000, 2)
+        except ValueError:
+            # กรณีที่ข้อมูลไม่ถูกต้อง
+            error = "กรุณากรอกข้อมูลที่ถูกต้อง"
+
+    return render_template(
+        'benzathine_penicillin_g.html',
+        dose=dose,
+        calculated_ml=calculated_ml,
+        error=error,
+        update_date=UPDATE_DATE
+    )
+
 @app.route('/cefotaxime', methods=['GET', 'POST'])
 def cefotaxime_route():
     dose = None
@@ -1329,24 +1353,37 @@ def calculate_pma_route(gestational_age_weeks, gestational_age_days, postnatal_a
 @app.route('/calculate_pma', methods=['GET', 'POST'])
 def calculate_pma_route():
     if request.method == 'POST':
-        # รับค่าจากฟอร์ม
-        gestational_age_weeks = int(request.form['gestational_age_weeks'])
-        gestational_age_days = int(request.form['gestational_age_days'])
-        postnatal_age_days = int(request.form['postnatal_age_days'])
-        bw = float(request.form['bw'])  # น้ำหนักแรกเกิด
+        try:
+            # รับค่าจากฟอร์ม
+            gestational_age_weeks = int(request.form['gestational_age_weeks'])
+            gestational_age_days = int(request.form['gestational_age_days'])
+            postnatal_age_days = int(request.form['postnatal_age_days'])
+            bw = float(request.form['bw'])  # น้ำหนักแรกเกิด
 
-        # คำนวณ PMA
-        total_gestational_age_days = (gestational_age_weeks * 7) + gestational_age_days
-        total_pma_days = total_gestational_age_days + postnatal_age_days
-        pma_weeks = total_pma_days // 7
-        pma_days = total_pma_days % 7
-        calc = total_pma_days // 7
+            # คำนวณ PMA
+            total_gestational_age_days = (gestational_age_weeks * 7) + gestational_age_days
+            total_pma_days = total_gestational_age_days + postnatal_age_days
+            pma_weeks = total_pma_days // 7
+            pma_days = total_pma_days % 7
+            calc = total_pma_days // 7
 
-        # ส่งค่าไปที่ template เพื่อแสดงผลลัพธ์ พร้อมกับ update_date
-        return render_template('pma_template.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, bw=bw, postnatal_days=postnatal_age_days, update_date=UPDATE_DATE)
-    
-    # ถ้าเป็น GET request จะให้แสดงหน้า form
+            # ส่งค่าไปที่ template เพื่อแสดงผลลัพธ์ พร้อมกับ update_date
+            return render_template(
+                'pma_template.html',
+                pma_weeks=pma_weeks,
+                pma_days=pma_days,
+                calc=calc,
+                bw=bw,
+                postnatal_days=postnatal_age_days,
+                update_date=UPDATE_DATE
+            )
+        except (KeyError, ValueError) as e:
+            # กรณีที่มีข้อผิดพลาด
+            return "Invalid input, please check your values.", 400
+
+    # ถ้าเป็น GET request
     return render_template('pma_template.html', update_date=UPDATE_DATE)
+
 
 # Route สำหรับหน้าแสดงการคำนวณยา
 @app.route('/drug_calculation', methods=['POST'])
@@ -1361,8 +1398,8 @@ def drug_calculation():
     if not all([pma_weeks, pma_days, calc, bw, postnatal_days]):
         return "Invalid data received", 400
 
-    # แปลงค่าที่รับมาเป็น float และปัดเศษน้ำหนักให้เป็นจำนวนเต็ม
-    bw = math.ceil(float(bw))  # ใช้ math.ceil เพื่อปัดน้ำหนักขึ้นให้เป็นจำนวนเต็ม
+    # แปลงค่าที่รับมาเป็น float และคงค่าทศนิยมไว้
+    bw = round(float(bw), 2)  # ปัดน้ำหนักให้แสดงทศนิยม 2 ตำแหน่ง
 
     # เพิ่มตัวอย่างการคำนวณโดยใช้ค่าตัวแปร
     dose = float(calc) * bw  # ตัวอย่างการคำนวณโดยการคูณ calc ด้วยน้ำหนัก
@@ -1378,6 +1415,7 @@ def drug_calculation():
         dose=dose,  # ส่งผลลัพธ์การคำนวณไปยัง template
         update_date=UPDATE_DATE
     )
+
 
 @app.route('/acyclovir_dose')
 def acyclovir_dose():
@@ -1419,70 +1457,55 @@ def amikin_dose():
     postnatal_days = request.args.get('postnatal_days')
     bw = request.args.get('bw')
 
-    # พิมพ์ค่าที่ได้รับจาก query parameters เพื่อการตรวจสอบ
-    print(f"Received values - pma_weeks: {pma_weeks}, pma_days: {pma_days}, calc: {calc}, postnatal_days: {postnatal_days}, bw: {bw}")
-
     # ตรวจสอบค่าที่ได้รับ
-    if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
-        return "Invalid data received - missing parameters", 400
-
     try:
         pma_weeks = int(pma_weeks)
         pma_days = int(pma_days)
         calc = float(calc)
         postnatal_days = int(postnatal_days)
         bw = float(bw)
-    except ValueError:
-        return "Invalid data received - value error", 400
+    except (ValueError, TypeError):
+        return "Invalid input parameters", 400
 
-    # กำหนดค่า dose ตาม PMA และ postnatal age
-    recommended_dose_per_kg = None
-
-    # ตรวจสอบเงื่อนไขตามช่วงอายุและน้ำหนักเพื่อกำหนด dose
-    if bw <= 0.8 and postnatal_days < 14:
-        recommended_dose_per_kg = 16.0  # mg/kg
-    elif 0.8 < bw <= 1.2 and postnatal_days < 14:
-        recommended_dose_per_kg = 16.0  # mg/kg
-    elif 1.2 < bw <= 2.0 and postnatal_days < 14:
-        recommended_dose_per_kg = 15.0  # mg/kg
-    elif 2.0 < bw <= 2.8 and postnatal_days < 14:
-        recommended_dose_per_kg = 15.0  # mg/kg
-    elif bw > 2.8 and postnatal_days < 14:
-        recommended_dose_per_kg = 15.0  # mg/kg
-    elif postnatal_days >= 14:
-        # Adjust dose for older neonates
+    # กำหนดค่า dose ตามเงื่อนไข
+    if postnatal_days < 14:
         if bw <= 0.8:
-            recommended_dose_per_kg = 20.0  # mg/kg
+            dose_per_kg = 16
         elif 0.8 < bw <= 1.2:
-            recommended_dose_per_kg = 20.0  # mg/kg
+            dose_per_kg = 16
         elif 1.2 < bw <= 2.0:
-            recommended_dose_per_kg = 18.0  # mg/kg
+            dose_per_kg = 15
         elif 2.0 < bw <= 2.8:
-            recommended_dose_per_kg = 18.0  # mg/kg
-        elif bw > 2.8:
-            recommended_dose_per_kg = 18.0  # mg/kg
+            dose_per_kg = 15
+        else:
+            dose_per_kg = 15
+    else:  # postnatal_days >= 14
+        if bw <= 0.8:
+            dose_per_kg = 20
+        elif 0.8 < bw <= 1.2:
+            dose_per_kg = 20
+        elif 1.2 < bw <= 2.0:
+            dose_per_kg = 18
+        elif 2.0 < bw <= 2.8:
+            dose_per_kg = 18
+        else:
+            dose_per_kg = 18
 
-    if recommended_dose_per_kg is None:
-        return "No suitable dose found for the given PMA and postnatal age", 400
+    # คำนวณปริมาณยา
+    calculated_dose = round(dose_per_kg * bw)
 
-    # คำนวณปริมาณยาที่ควรได้รับ
-    calculated_dose = recommended_dose_per_kg * bw
-    calculated_dose = round(calculated_dose)  # ปัดเศษเป็นจำนวนเต็ม
-
-    # พิมพ์ค่า dose ที่คำนวณได้เพื่อการตรวจสอบ
-    print(f"Calculated dose: {calculated_dose} mg")
-
-    # ส่งค่าไปที่ template พร้อมกับ update_date
+    # ส่งค่ากลับไปที่ HTML template
     return render_template(
-    'amikin_dose.html',
-    pma_weeks=pma_weeks,
-    pma_days=pma_days,
-    calc=calc,
-    postnatal_days=postnatal_days,
-    bw=bw,
-    calculated_dose=calculated_dose,
-    update_date=UPDATE_DATE
-)
+        'amikin_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,
+        calculated_dose=calculated_dose,
+        update_date=UPDATE_DATE
+    )
+
 
 
 
@@ -1577,6 +1600,109 @@ def ampicillin_dose():
 
     # ส่งค่าไปที่ template พร้อมกับ update_date และปริมาณยาที่คำนวณได้
     return render_template('ampicillin_dose.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw, calculated_dose=calculated_dose, update_date=UPDATE_DATE)
+@app.route('/cefazolin_dose')
+def cefazolin_dose():
+    # รับค่าจาก query parameters
+    pma_weeks = request.args.get('pma_weeks')
+    pma_days = request.args.get('pma_days')
+    calc = request.args.get('calc')
+    postnatal_days = request.args.get('postnatal_days')
+    bw = request.args.get('bw')
+
+    # Debug log สำหรับตรวจสอบค่าที่ได้รับ
+    print(f"Received parameters: pma_weeks={pma_weeks}, pma_days={pma_days}, calc={calc}, postnatal_days={postnatal_days}, bw={bw}")
+
+    # ตรวจสอบค่าที่ได้รับ
+    if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
+        return "Invalid data received - missing parameters", 400
+
+    try:
+        # แปลงค่าให้เป็นตัวเลข
+        pma_weeks = int(pma_weeks)
+        pma_days = int(pma_days)
+        calc = float(calc)
+        postnatal_days = int(postnatal_days)
+        bw = float(bw)  # รองรับค่า BW เป็นทศนิยม
+        print(f"BW after conversion to float: {bw}")  # Debug log
+    except ValueError:
+        return "Invalid input: Parameters must be numeric.", 400
+
+    # Example dose and interval logic for CeFAZolin
+    dose_per_kg = 25  # Example dose in mg/kg
+    interval = "every 8 hours"
+
+    # Calculate total dose
+    calculated_dose = round(dose_per_kg * bw, 2)
+    print(f"Calculated Dose for CeFAZolin: {calculated_dose} mg")  # Debug log
+
+    # ส่งค่าไปที่ Template
+    return render_template(
+        'cefazolin_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,  # ส่งค่า BW เป็นทศนิยม
+        calculated_dose=calculated_dose,
+        interval=interval,
+        update_date=UPDATE_DATE
+    )
+@app.route('/cefotaxime_dose')
+def cefotaxime_dose():
+    # รับค่าจาก query parameters
+    pma_weeks = request.args.get('pma_weeks')
+    pma_days = request.args.get('pma_days')
+    calc = request.args.get('calc')
+    postnatal_days = request.args.get('postnatal_days')
+    bw = request.args.get('bw')
+
+    # ตรวจสอบค่าที่ได้รับ
+    try:
+        pma_weeks = int(pma_weeks)
+        pma_days = int(pma_days)
+        calc = float(calc)
+        postnatal_days = int(postnatal_days)
+        bw = float(bw)
+    except (ValueError, TypeError):
+        return "Invalid input parameters", 400
+
+    # กำหนดค่า dose ตามเงื่อนไข
+    if postnatal_days < 7:
+        if bw <= 1.0:
+            dose_per_kg = 50
+        elif 1.0 < bw <= 2.0:
+            dose_per_kg = 50
+        else:
+            dose_per_kg = 50
+    elif 7 <= postnatal_days <= 28:
+        if bw <= 1.0:
+            dose_per_kg = 50
+        elif 1.0 < bw <= 2.0:
+            dose_per_kg = 50
+        else:
+            dose_per_kg = 50
+    else:  # postnatal_days > 28
+        if bw <= 1.0:
+            dose_per_kg = 100
+        elif 1.0 < bw <= 2.0:
+            dose_per_kg = 100
+        else:
+            dose_per_kg = 100
+
+    # คำนวณปริมาณยา
+    calculated_dose = round(dose_per_kg * bw)
+
+    # ส่งค่ากลับไปที่ HTML template
+    return render_template(
+        'cefotaxime_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,
+        calculated_dose=calculated_dose,
+        update_date=UPDATE_DATE
+    )
 
 @app.route('/cloxacillin_dose')
 def cloxacillin_dose():
@@ -1628,6 +1754,81 @@ def cloxacillin_dose():
 
     # ส่งค่าไปที่ template พร้อมกับ update_date
     return render_template('cloxacillin_dose.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw, calculated_dose=calculated_dose, update_date=UPDATE_DATE)
+
+
+
+@app.route('/colistin_dose')
+def colistin_dose():
+    # รับค่าจาก query parameters
+    pma_weeks = request.args.get('pma_weeks')
+    pma_days = request.args.get('pma_days')
+    calc = request.args.get('calc')
+    postnatal_days = request.args.get('postnatal_days')
+    bw = request.args.get('bw')
+
+    # Debug log สำหรับตรวจสอบค่าที่ได้รับ
+    print(f"Received parameters: pma_weeks={pma_weeks}, pma_days={pma_days}, calc={calc}, postnatal_days={postnatal_days}, bw={bw}")
+
+    # ตรวจสอบค่าที่ได้รับ
+    if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
+        return "Invalid data received - missing parameters", 400
+
+    try:
+        # แปลงค่าให้เป็นตัวเลข
+        pma_weeks = int(pma_weeks)
+        pma_days = int(pma_days)
+        calc = float(calc)
+        postnatal_days = int(postnatal_days)
+        bw = float(bw)  # รองรับค่า BW เป็นทศนิยม
+        print(f"BW after conversion to float: {bw}")  # Debug log
+    except ValueError:
+        return "Invalid input: Parameters must be numeric.", 400
+
+    # กำหนดค่า dose และ interval
+    min_dose_per_kg = None
+    max_dose_per_kg = None
+    interval = None
+
+    if postnatal_days < 7:
+        min_dose_per_kg = 2.5
+        max_dose_per_kg = 5.0
+        interval = "every 12 hours"
+    elif postnatal_days >= 7 and pma_weeks < 32:
+        min_dose_per_kg = 2.5
+        max_dose_per_kg = 5.0
+        interval = "every 8 hours"
+    elif postnatal_days >= 7 and pma_weeks >= 32:
+        min_dose_per_kg = 2.5
+        max_dose_per_kg = 5.0
+        interval = "every 6 hours"
+
+    if min_dose_per_kg is None or max_dose_per_kg is None or interval is None:
+        return "No suitable dose found for the given PMA and postnatal age.", 400
+
+    # คำนวณช่วงปริมาณยาที่ควรได้รับ
+    calculated_min_dose = round(min_dose_per_kg * bw, 2)
+    calculated_max_dose = round(max_dose_per_kg * bw, 2)
+    print(f"Calculated Dose Range: {calculated_min_dose} - {calculated_max_dose} mg")  # Debug log
+
+    # ส่งค่าไปที่ Template
+    return render_template(
+        'colistin_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,  # ส่งค่า BW เป็นทศนิยม
+        min_dose=calculated_min_dose,
+        max_dose=calculated_max_dose,
+        interval=interval,
+        update_date=UPDATE_DATE
+    )
+
+
+
+
+
+
 
 
 

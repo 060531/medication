@@ -182,27 +182,27 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="{% if bw <= 0.8 and postnatal_days < 14 %} highlight {% endif %}">
+        <tr class="{% if bw <= 0.8 %} highlight {% endif %}">
             <td>800 g or less</td>
             <td>16 mg/kg/dose every 48 hours</td>
             <td>20 mg/kg/dose every 42 hours</td>
         </tr>
-        <tr class="{% if 0.8 < bw <= 1.2 and postnatal_days < 14 %} highlight {% endif %}">
+        <tr class="{% if 0.8 < bw <= 1.2 %} highlight {% endif %}">
             <td>801 to 1200 g</td>
             <td>16 mg/kg/dose every 42 hours</td>
             <td>20 mg/kg/dose every 36 hours</td>
         </tr>
-        <tr class="{% if 1.2 < bw <= 2.0 and postnatal_days < 14 %} highlight {% endif %}">
+        <tr class="{% if 1.2 < bw <= 2.0 %} highlight {% endif %}">
             <td>1201 to 2000 g</td>
             <td>15 mg/kg/dose every 36 hours</td>
             <td>18 mg/kg/dose every 30 hours</td>
         </tr>
-        <tr class="{% if 2.0 < bw <= 2.8 and postnatal_days < 14 %} highlight {% endif %}">
+        <tr class="{% if 2.0 < bw <= 2.8 %} highlight {% endif %}">
             <td>2001 to 2800 g</td>
             <td>15 mg/kg/dose every 36 hours</td>
             <td>18 mg/kg/dose every 24 hours</td>
         </tr>
-        <tr class="{% if bw > 2.8 and postnatal_days < 14 %} highlight {% endif %}">
+        <tr class="{% if bw > 2.8 %} highlight {% endif %}">
             <td>2800 g or greater</td>
             <td>15 mg/kg/dose every 30 hours</td>
             <td>18 mg/kg/dose every 20 hours</td>

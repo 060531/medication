@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Benzathine Penicillin G Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
+
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+
+        /* กรอบสีเหลืองออกครีม (#F6C8B6) */
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #007bbe;
+            border-radius: 10px;
+            background-color: rgba(96, 179, 218, 0.633); /* สีพื้นหลังพร้อมความโปร่งใส */
+            z-index: 0;
+            position: relative;
+        }
+
+        /* กรอบและการเน้นข้อความสำหรับ h2 */
+        h2 {
+            color: hsl(240, 5%, 96%);
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px;
+            border: 2px solid #7b9adb; /* เพิ่มกรอบสีแดงเข้ม */
+            border-radius: 10px;
+            display: inline-block; /* ทำให้กรอบมีขนาดพอดีกับข้อความ */
+            background-color: #00178c; /* พื้นหลังสีเหลือง */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 20%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px; /* ลดระยะห่างด้านล่างของ div */
+        }
+
+        .result p {
+            margin: 5px 0; /* ลดระยะห่างด้านบนและล่างของแต่ละบรรทัด */
+            line-height: 1.2; /* ปรับความสูงของบรรทัด */
+        }
+
+        .left-align {
+            text-align: left; /* จัดข้อความชิดซ้าย */
+        }
+
+        .blue-box {
+            background-color: #e0f7fa;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .back-button, .calculate-button, .back-button-secondary {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px #999;
+        }
+
+        .back-button {
+            background-color: #f44336;
+        }
+
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .back-button-secondary {
+            background-color: #008CBA;
+        }
+
+        .back-button-secondary:hover {
+            background-color: #007B9A;
+        }
+
+        .calculate-button {
+            background-color: #007BFF;
+        }
+
+        .calculate-button:hover {
+            background-color: #0056b3;
+        }
+
+        .calculate-button:active {
+            background-color: #0056b3;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+        /* กรอบสำหรับข้อความที่ต้องการให้โดดเด่น */
+        .highlight-box {
+            background-color: #2960f6; /* สีพื้นหลังเหลือง */
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        /* ทำให้ส่วนนี้ชิดขอบซ้าย */
+        .left-align {
+            text-align: left;
+        }
+
+        .extra-content {
+            border: 2px solid #b3e5fc;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #a6b5f0a6;
+            z-index: 1;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    form {
+        gap: 10px;
+    }
+
+    input, select, .calculate-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+}
+       .header {
+            font-size: 18px; /* เพิ่มขนาดข้อความ */
+            text-decoration: underline; /* เส้นใต้ */
+            text-decoration-thickness: 2px; /* ความหนาของเส้นใต้ */
+            text-decoration-line: underline double; /* เส้นใต้สองเส้น */
+        }
+
+        .list {
+            list-style-type: none; /* เอา bullet ปกติออก */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .list li::before {
+            content: "⦿ "; /* ใส่เครื่องหมาย ➢ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ➢ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ➢ และข้อความ */
+        }
+
+        .item {
+            font-size: 18px; /* ขนาดข้อความ */
+            margin-top: 0; /* ลดระยะห่างด้านบน */
+            margin-left: 20px; /* ระยะห่างด้านซ้าย */
+        }
+
+        .item::before {
+            content: "☞ "; /* ใส่เครื่องหมาย ☞ ก่อนข้อความ */
+            font-size: 18px; /* ขนาดของเครื่องหมาย ☞ */
+            margin-right: 5px; /* ระยะห่างระหว่าง ☞ และข้อความ */
+        }
+        .content {
+            line-height: 1.2; /* ลดความสูงของบรรทัด */
+        }
+
+        .content p {
+            margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+        }
+
+        .content .item {
+            margin-left: 20px; /* จัดระยะห่างซ้ายให้เป็นลำดับรอง */
+        }
+        .left-align {
+        line-height: 1.2; /* ลดความสูงระหว่างบรรทัด */
+    }
+
+    .left-align p {
+        margin: 5px 0; /* ลดระยะห่างระหว่างย่อหน้า */
+    }
+
+    .left-align ul.list {
+        margin: 5px 0; /* ลดระยะห่างระหว่างรายการ */
+        padding-left: 20px; /* เพิ่มการเยื้องให้รายการใน ul */
+    }
+
+    .left-align ul.list li {
+        margin: 3px 0; /* ลดระยะห่างระหว่างแต่ละรายการใน ul */
+    }
+        form {
+            border: 2px solid #7899ec; /* เส้นกรอบ */
+            border-radius: 10px; /* มุมโค้ง */
+            padding: 20px; /* ระยะห่างภายใน */
+            background-color: #c5d5f398; /* สีพื้นหลัง */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เงากรอบ */
+        }
+
+        
+        /* ให้แน่ใจว่าฟุตเตอร์ไม่ถูกซ่อน */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgb(255, 255, 255);
+            font-size: 14px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Benzathine Penicillin G 1.2 MU (1,200,000 unit/Vial)</h2>
+        <div class="container">
+
+            <form method="POST">
+                <label for="dose">กรอกขนาดยา (unit):</label>
+                <input type="number" name="dose" step="0.01" required value="{{ dose or '' }}">
+                <!-- Add some margin above the button -->
+            <button type="submit" class="calculate-button" style="margin-top: 20px;">Calculate</button>
+            </form>
+        
+            {% if error %}
+            <div style="color: red;">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+        
+            {% if dose and calculated_ml %}
+            <div class="result">
+                <p><strong>Order:</strong> Benzathine Penicillin G {{ dose }} unit</p>
+                <div class="left-align">
+                <p><strong>Calculation:</strong> {{ dose }} unit × 8 ml / 150,000 U/ml = {{ calculated_ml }} ml</p>
+                <p><strong>Result:</strong> {{ calculated_ml }} ml</p>
+            </div>
+            </div>
+            {% endif %}
+                <!-- เพิ่ม class 'left-align' เพื่อทำให้ชิดซ้าย -->
+                <div class="left-align">
+            <p class="header"><b>Solvent</b></p>
+        <ul class="list">
+            <li>Sterile water 3.6 ml จะได้สารละลายยา 4 ml(300,000 unit/ml)</li>
+            <li>Sterile water 7.2 ml จะได้สารละลายยา 8 ml(150,000 unit/ml)</li>
+        </ul>
+
+        <hr style="border: 0; border-top: 2px solid #007BFF; margin: 20px 0;">
+        <ul class="list">
+            <li>Early syhilis 2.4 MU IM</li>
+        </ul>
+        <ul class="list">
+            <li>single dose แบ่งฉีดข้างละ 1.2 MU</li>
+        </ul>
+        <ul class="list">
+            <li>Late syhilis 2.4 MU IM</li>
+        </ul>
+        <p><b>สัปดาห์ละ 1 ครั้ง นาน 3 สัปดาห์ติดต่อกัน (ให้แบ่งฉีดเข้ากล้ามเนื้อสะโพกข้างละ 1.2 MU)</b></p>
+        <p style="color: red; text-decoration: underline; text-align: center;">
+    **IM route only** <br> Deep IM กล้ามเนื้อสะโพก</p>
+
+        <hr style="border: 0; border-top: 2px solid #007BFF; margin: 20px 0;">
+            <p class="header"><b>**ไม่แนะนำให้เก็บยาที่ละลายแล้วใน Vial ใช้ไม่หมดให้ทิ้งทันที</b></p>
+        </div>
+    </div>
+    <div class="button-group">
+        <a href="javascript:history.back()" class="back-button-secondary">Back</a>
+        <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+    </div>
+
+    <footer>
+        <p>Developed by Sukhontha Boonsukchan | update {{ update_date }}</p>
+    </footer>
+</body>
+</html>
