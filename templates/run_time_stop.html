@@ -108,22 +108,8 @@
             background-color: #f44336;
         }
 
-        .back-button:hover {
-            background-color: #d32f2f;
-        }
-
-        .back-button:active {
-            background-color: #d32f2f;
-            box-shadow: 0 4px #666;
-            transform: translateY(4px);
-        }
-
         .back-button-secondary {
             background-color: #008CBA;
-        }
-
-        .back-button-secondary:hover {
-            background-color: #007B9A;
         }
         
         .styled-button {
@@ -137,23 +123,6 @@
             border-radius: 12px;
             box-shadow: 0 4px #999;
             transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .styled-button:hover {
-            background-color: #45a049;
-        }
-
-        .styled-button:active {
-            background-color: #3e8e41;
-            box-shadow: 0 2px #666;
-            transform: translateY(4px);
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #fff;
-            font-size: 14px;
         }
     </style>
 </head>
@@ -176,6 +145,7 @@
             <option value="18">18:00</option>
             <option value="20">20:00</option>
             <option value="22">22:00</option>
+            <!-- ถ้าอยากให้เห็นเป็น 24:00 -->
             <option value="24">24:00</option>
         </select>
 
@@ -200,41 +170,90 @@
     </div>
 
     <script>
+        // ฟังก์ชันสำหรับ "แปลง" วัน-เวลาเพื่อแสดงผลเป็น 24:00 ของวันเดิม
+        function formatDateTime(dateObj) {
+            // สร้างสำเนา (clone) dateObj มาปรับค่าเพื่อใช้แสดงผล
+            const displayDate = new Date(dateObj);
+            let hours = displayDate.getHours();
+            let minutes = displayDate.getMinutes();
+
+            // ถ้าเป็นเที่ยงคืน (0:00)
+            // เราต้องการแสดงเป็น "24:00" ของวันก่อนหน้า
+            if (hours === 0 && minutes === 0) {
+                // ลดวันที่ใน displayDate ลง 1
+                displayDate.setDate(displayDate.getDate() - 1);
+
+                // แปลงวันที่เป็น string
+                let dateStr = displayDate.toLocaleDateString(); 
+                // แล้วคืนค่าเป็น { date: "...", time: "24:00" }
+                return {
+                    date: dateStr,
+                    time: "24:00"
+                };
+            } else {
+                // ถ้าไม่ใช่เที่ยงคืน ก็แสดงผลตามปกติ
+                let dateStr = displayDate.toLocaleDateString();
+                // จัดรูปแบบเวลาเป็น HH:MM
+                let hh = String(hours).padStart(2, '0');
+                let mm = String(minutes).padStart(2, '0');
+                return {
+                    date: dateStr,
+                    time: `${hh}:${mm}`
+                };
+            }
+        }
+
         function calculateSchedule() {
             const dateInput = document.getElementById('date').value;
-            const timeInput = document.getElementById('startTime').value.padStart(2, '0');
+            const rawTimeInput = document.getElementById('startTime').value;
             const interval = parseInt(document.getElementById('interval').value);
             const numDays = parseInt(document.getElementById('days').value);
             const resultDiv = document.getElementById('scheduleResult');
 
-            if (!dateInput || !timeInput || isNaN(numDays) || numDays <= 0) {
+            if (!dateInput || !rawTimeInput || isNaN(numDays) || numDays <= 0) {
                 resultDiv.innerHTML = "<p style='color: red;'>Please select a start date, start time, and valid number of days.</p>";
+                resultDiv.style.display = "block";
                 return;
             }
 
+            // สร้าง Date object
+            const timeInput = rawTimeInput.padStart(2, '0');
             const startDateTime = new Date(`${dateInput}T${timeInput}:00`);
+
             const scheduleTimes = [];
             const totalHours = numDays * 24;
 
+            // ลูปสร้างตารางยา
             for (let i = 0; i < totalHours; i += interval) {
                 const doseTime = new Date(startDateTime.getTime() + i * 60 * 60 * 1000);
+
+                // ใช้ formatDateTime() เพื่อแปลงเป็น { date, time } 
+                // และดักเคส 00:00 -> 24:00 (วันก่อนหน้า)
+                const formatted = formatDateTime(doseTime);
+
                 scheduleTimes.push({
-                    date: doseTime.toLocaleDateString(),
-                    time: doseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    date: formatted.date,
+                    time: formatted.time
                 });
             }
 
             if (scheduleTimes.length > 0) {
-                resultDiv.innerHTML = `<h3>Scheduled Times for ${numDays} Days:</h3>
+                // สร้างตาราง
+                resultDiv.innerHTML = `
+                    <h3>Scheduled Times for ${numDays} Days:</h3>
                     <table>
-                        <tr><th>Date</th><th>Time</th></tr>` +
-                    scheduleTimes.map(entry => `<tr><td>${entry.date}</td><td>${entry.time}</td></tr>`).join('') +
-                    "</table>";
+                        <tr><th>Date</th><th>Time</th></tr>
+                        ${
+                            scheduleTimes.map(entry => 
+                                `<tr><td>${entry.date}</td><td>${entry.time}</td></tr>`
+                            ).join('')
+                        }
+                    </table>
+                `;
             } else {
                 resultDiv.innerHTML = "<p style='color: red;'>No schedule times generated. Please check your inputs.</p>";
             }
-        // แสดงผลลัพธ์
-        resultDiv.style.display = "block";
+            resultDiv.style.display = "block";
         }
     </script>
 
@@ -244,7 +263,7 @@
     </div>
 
     <footer>
-        <p>Developed by Sukhontha Boonsukchan | update {{ update_date }}</p>
+        <p>Developed by Sukhontha Boonsookchan | update {{ update_date }}</p>
     </footer>
 </body>
 </html>
