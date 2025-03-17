@@ -55,7 +55,7 @@
       width: 100%;
     }
     .result {
-      display: none; /* ซ่อนผลลัพธ์ก่อน */
+      display: none;
       margin-top: 20px;
       padding: 20px;
       background-color: rgba(255, 255, 255, 0.85);
@@ -72,7 +72,6 @@
       color: #333;
       margin-bottom: 15px;
     }
-    /* ตารางสำหรับ 30, 36, 48 ชั่วโมง */
     .result-table {
       width: 100%;
       border-collapse: collapse;
@@ -88,21 +87,6 @@
       background-color: #4CAF50;
       color: white;
       font-weight: bold;
-    }
-    /* รายการสำหรับช่วงเวลาอื่น */
-    .result ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    .result li {
-      padding: 5px 0;
-      font-size: 16px;
-      color: #333;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    .result li:last-child {
-      border-bottom: none;
     }
     .styled-button {
       background-color: #117314;
@@ -143,14 +127,8 @@
     .back-button {
       background-color: #f44336;
     }
-    .back-button:hover {
-      background-color: #d32f2f;
-    }
     .back-button-secondary {
       background-color: #008CBA;
-    }
-    .back-button-secondary:hover {
-      background-color: #007B9A;
     }
     footer {
       text-align: center;
@@ -188,9 +166,7 @@
       <option value="18">18:00</option>
       <option value="20">20:00</option>
       <option value="22">22:00</option>
-      <!-- แก้เป็น 23:59 หรือ 24 (แล้วค่อยแปลงในโค้ด) ก็ได้
-           แต่ถ้าต้องการคงค่า "24" แล้วแสดงใน UI เป็น 24:00
-           ควรมีเงื่อนไขใน JS เพื่อจัดการเวลาให้ถูกต้อง -->
+      <!-- หากต้องการให้ผู้ใช้เห็นเป็น 24:00 ให้ใช้ value="24" แล้วดักในโค้ด -->
       <option value="24">24:00</option>
     </select>
 
@@ -212,27 +188,61 @@
   </div>
 
   <script>
-    // ฟังก์ชันช่วยในการแปลงเวลา หากเป็นเที่ยงคืน (00:00) จะบังคับให้แสดง 24:00
-    function formatTime(doseTime) {
-      // ใช้ toLocaleTimeString() เพื่อให้เป็นรูปแบบ HH:MM (24 ชม.)
-      let timeStr = doseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    /**
+     * ฟังก์ชันจัดรูปแบบวัน-เวลา:
+     * ถ้าเป็นเที่ยงคืน (00:00) ให้แสดงเป็นวันก่อนหน้า 24:00
+     */
+    function formatDateTime(doseTime) {
+      const cloneTime = new Date(doseTime);
+      const hours = cloneTime.getHours();
+      const minutes = cloneTime.getMinutes();
 
-      // ถ้าเป็น 00:00 ให้แสดงเป็น 24:00
-      if (doseTime.getHours() === 0 && doseTime.getMinutes() === 0) {
-        timeStr = "24:00";
+      if (hours === 0 && minutes === 0) {
+        // วันก่อนหน้า 24:00
+        cloneTime.setDate(cloneTime.getDate() - 1);
+        return {
+          date: cloneTime.toLocaleDateString(),
+          time: "24:00"
+        };
+      } else {
+        return {
+          date: cloneTime.toLocaleDateString(),
+          time: cloneTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
       }
+    }
 
-      return timeStr;
+    /**
+     * ฟังก์ชันสร้างตาราง HTML
+     * @param {string} title - หัวตาราง
+     * @param {Array} data - อาร์เรย์ของวัตถุ schedule
+     * @param {boolean} showDate - true ถ้าต้องการแสดงวันที่, false แสดงเฉพาะเวลา
+     */
+    function createTable(title, data, showDate) {
+      let tableHTML = `<h3>${title}</h3><table class='result-table'><tr>`;
+      if (showDate) {
+        tableHTML += `<th>Date</th>`;
+      }
+      tableHTML += `<th>Time</th></tr>`;
+
+      data.forEach(entry => {
+        tableHTML += `<tr>`;
+        if (showDate) {
+          tableHTML += `<td>${entry.date}</td>`;
+        }
+        tableHTML += `<td>${entry.time}</td></tr>`;
+      });
+      tableHTML += `</table>`;
+      return tableHTML;
     }
 
     function calculateSchedule() {
       const dateInput = document.getElementById('date').value;
-      let rawTimeInput = document.getElementById('startTime').value;
+      const rawTimeInput = document.getElementById('startTime').value;
       const interval = parseInt(document.getElementById('interval').value);
       const resultDiv = document.getElementById('scheduleResult');
 
-      // หากเลือก value="24" จะตีความเป็น 23:59 เพื่อให้ Date() สร้างได้ถูกต้อง
-      // แต่แสดงบน UI เป็น "24:00"
+      // ถ้า value="24" ให้แปลงเป็น 23:59 เพื่อสร้าง Date object ได้ถูกต้อง
       let timeInput;
       if (rawTimeInput === "24") {
         timeInput = "23:59";
@@ -247,47 +257,71 @@
       }
 
       const startDateTime = new Date(`${dateInput}T${timeInput}:00`);
-      const scheduleTimes = [];
+      let scheduleTimes = [];
 
-      // กรณี interval เป็น 30, 36, 48 -> แสดง 10 วัน
+      // ตั้งค่าสำหรับการแสดงวันที่:
+      // - 30, 36, 48 ชม. => แสดงวันที่ (10 วัน)
+      // - กรณีอื่น ๆ (รวมถึง 24 ชม.) => ไม่ต้องแสดงวันที่
+      let showDate = false;
+
       if (interval === 30 || interval === 36 || interval === 48) {
+        // (1) กรณี 30, 36, 48 => ตาราง 10 วัน และต้องแสดงวันที่
+        showDate = true;
         for (let i = 0; i < 10 * 24; i += interval) {
           const doseTime = new Date(startDateTime.getTime() + i * 60 * 60 * 1000);
+          const formatted = formatDateTime(doseTime);
+          // เก็บ timestamp (ms) ไว้เรียงตามเวลาจริง (ไม่ค่อยจำเป็น แต่เผื่อข้ามวัน)
           scheduleTimes.push({
-            date: doseTime.toLocaleDateString(),
-            time: formatTime(doseTime) // เรียกใช้ฟังก์ชัน formatTime
+            ms: doseTime.getTime(),
+            date: formatted.date,
+            time: formatted.time
           });
         }
+        // เรียงตามเวลาจริง (timestamp)
+        scheduleTimes.sort((a, b) => a.ms - b.ms);
 
-        let tableHTML =
-          "<h3>Scheduled Times for 10 Days:</h3><table class='result-table'><tr><th>Date</th><th>Time</th></tr>";
-        scheduleTimes.forEach(entry => {
-          tableHTML += `<tr><td>${entry.date}</td><td>${entry.time}</td></tr>`;
-        });
-        tableHTML += "</table>";
-        resultDiv.innerHTML = tableHTML;
+        resultDiv.innerHTML = createTable("Scheduled Times for 10 Days:", scheduleTimes, showDate);
       } else {
-        // กรณี interval เป็น 4, 6, 8, 12, 24 -> แสดงภายใน 24 ชั่วโมง
+        // (2) กรณีอื่น ๆ (4, 6, 8, 12, 24) => แสดงใน 24 ชั่วโมงแรก โดยไม่ต้องแสดงวันที่
         for (let i = interval; i <= 24; i += interval) {
           const doseTime = new Date(startDateTime);
           doseTime.setHours(doseTime.getHours() + i);
+          let formatted = formatDateTime(doseTime);
+
+          // ถ้าเป็น Dose แรก (i === interval) และ rawTimeInput === "24"
+          // บังคับให้แสดง "24:00" ของวันเริ่มต้น
+          if (i === interval && rawTimeInput === "24") {
+            const baseDate = new Date(dateInput);
+            formatted = {
+              date: baseDate.toLocaleDateString(),
+              time: "24:00"
+            };
+          }
+
+          // เก็บ hour/minute ไว้เรียงตามเวลาของวัน
+          // เพื่อให้ 02:00 < 08:00 < 14:00 < 20:00 ตามลำดับชั่วโมง
+          const hourVal = doseTime.getHours();
+          const minuteVal = doseTime.getMinutes();
+          // กรณี 00:00 -> 24:00 จาก formatDateTime() อาจต้องจัดการพิเศษ (ถ้าจำเป็น)
           scheduleTimes.push({
-            // ใช้ formatTime เพื่อดัก 00:00 -> 24:00
-            time: formatTime(doseTime),
-            hours: doseTime.getHours()
+            hour: hourVal,
+            minute: minuteVal,
+            date: formatted.date,
+            time: formatted.time
           });
         }
 
-        // เรียงลำดับเวลาตามชั่วโมงจากน้อยไปมาก (อาจไม่จำเป็น ถ้าสร้างลูปเรียงอยู่แล้ว)
-        scheduleTimes.sort((a, b) => a.hours - b.hours);
+        // เรียงตามชั่วโมง (และนาที) จากน้อยไปมาก (ไม่สนวัน)
+        scheduleTimes.sort((a, b) => {
+          const aTotal = a.hour * 60 + a.minute;
+          const bTotal = b.hour * 60 + b.minute;
+          return aTotal - bTotal;
+        });
 
-        resultDiv.innerHTML =
-          "<h3>Scheduled Times for 24 Hours:</h3><ul>" +
-          scheduleTimes.map(time => `<li>${time.time}</li>`).join('') +
-          "</ul>";
+        // สร้างตารางแบบไม่แสดงวันที่ (showDate = false)
+        resultDiv.innerHTML = createTable("Scheduled Times for 24 Hours:", scheduleTimes, showDate);
       }
 
-      // แสดงผลลัพธ์
       resultDiv.style.display = "block";
     }
   </script>
