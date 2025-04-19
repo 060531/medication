@@ -1,50 +1,69 @@
+# app.py
+import os
+import math
 from flask import Flask, render_template, request
-import os  # เพิ่มการนำเข้า os ที่นี่
-import math  # นำเข้า math เพื่อใช้สำหรับการปัดเศษ
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
+# 1) สร้าง Flask app และอ่าน config
 app = Flask(__name__)
+app.config.from_object('config.Config')
 
-# กำหนดค่าวันที่สำหรับการอัพเดต
+# 2) สร้างตัวเชื่อมต่อฐานข้อมูล และ Flask‑Migrate
+db      = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+# 3) import โมเดลเพื่อให้ SQLAlchemy รู้จัก
+import models
+
+# 4) ตัวแปรอัพเดตวันที่ส่งเข้า template ทุกตัว
 UPDATE_DATE = "22 November 2024"
-
-# ใช้ context_processor เพื่อส่งตัวแปร update_date ไปทุก template
 @app.context_processor
 def inject_update_date():
     return dict(update_date=UPDATE_DATE)
 
+# 5) บันทึกทุก request ลงตาราง access_logs
+@app.before_request
+def log_request():
+    log = models.AccessLog(
+        endpoint    = request.path,
+        method      = request.method,
+        remote_addr = request.remote_addr,
+        user_agent  = request.headers.get('User-Agent')
+    )
+    db.session.add(log)
+    db.session.commit()
 
+# —————— ROUTES ของคุณ ——————
 @app.route('/')
 def index():
-    print(app.url_map)  # Print all routes to debug
-    return render_template('index.html', update_date=UPDATE_DATE)
-
-
-
+    print(app.url_map)  # ใช้ debug ดูว่าระบุ route ถูกต้องไหม
+    return render_template('index.html')
 
 @app.route('/medication_administration')
 def medication_administration_route():
-    return render_template('Medication_administration.html', update_date=UPDATE_DATE)
-
+    return render_template('Medication_administration.html')
 
 @app.route('/time_management')
 def time_management_route():
-    return render_template('time_management.html', update_date=UPDATE_DATE)
+    return render_template('time_management.html')
 
 @app.route('/run_time')
 def run_time():
-    return render_template('run_time.html')  # ให้แน่ใจว่ามีไฟล์ run_time.html ในโฟลเดอร์ templates
+    return render_template('run_time.html')
 
 @app.route('/run_time_stop')
 def run_time_stop():
-    return render_template('run_time_stop.html')  # ให้แน่ใจว่ามีไฟล์ run_time_stop.html ในโฟลเดอร์ templates
-   
+    return render_template('run_time_stop.html')
+
 @app.route('/small_dose')
 def small_dose_route():
-    return render_template('small_dose.html', update_date=UPDATE_DATE)
+    return render_template('small_dose.html')
 
 @app.route('/fluids')
 def fluids_route():
-    return render_template('fluids.html', update_date=UPDATE_DATE)
+    return render_template('fluids.html')
+
 
 @app.route('/acyclovir', methods=['GET', 'POST'])
 def acyclovir_route():
@@ -1439,12 +1458,28 @@ def acyclovir_dose():
     except ValueError:
         return "Invalid data received - value error", 400
 
-    # Example dose calculation (can be customized)
-    dose = bw * 20  # Example of a dose calculation for Acyclovir (20 mg/kg)
+    # ตัวอย่างการคำนวณขนาดยา (Acyclovir) เช่น 20 mg/kg
+    min_dose = round(bw * 20, 2)  # mg/kg/dose
 
-    # ส่งค่าไปที่ template พร้อมกับ update_date
-    return render_template('acyclovir_dose.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw, dose=dose, update_date=UPDATE_DATE)
-   
+    # ตัวอย่างเงื่อนไขกำหนด interval (ปรับตามความต้องการ)
+    if pma_weeks < 30:
+        interval = "every 12 hours"
+    else:
+        interval = "every 8 hours"
+
+    # ส่งค่าไปที่ template (acyclovir_dose.html)
+    return render_template(
+        'acyclovir_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,
+        min_dose=min_dose,
+        interval=interval,
+        update_date=UPDATE_DATE
+    )
+
 
 
 
@@ -1540,6 +1575,114 @@ def aminophylline_dose():
 
     # ส่งค่าไปที่ template พร้อมกับ update_date
     return render_template('aminophylline_dose.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw, loading_dose=loading_dose, maintenance_dose_min=maintenance_dose_min, maintenance_dose_max=maintenance_dose_max, update_date=UPDATE_DATE)
+
+
+
+@app.route('/amoxicillin_clavimoxy_dose')
+def amoxicillin_clavimoxy_dose():
+    """
+    ตัวอย่าง Route สำหรับคำนวณขนาดยา Amoxicilline/Clavimoxy
+    โดยรับค่าจาก query parameters:
+      - pma_weeks, pma_days: ประมาณอายุครรภ์ (Gestational Age)
+      - calc: ค่าที่คำนวณเพิ่มเติม (ถ้ามี)
+      - postnatal_days: อายุหลังคลอด (Postnatal Age)
+      - bw: น้ำหนักตัว (กิโลกรัม)
+
+    จากนั้นประมวลผลเพื่อให้ได้ 'min_dose' (mg/kg/dose) และ 'interval'
+    แล้วคูณด้วยน้ำหนัก (bw) เพื่อให้ได้ actual_dose (mg/dose)
+    แล้วส่งไปแสดงผลใน Template 'amoxicillin_clavimoxy_dose.html'
+    """
+
+    # 1) รับค่าจาก query parameters
+    pma_weeks = request.args.get('pma_weeks')
+    pma_days = request.args.get('pma_days')
+    calc = request.args.get('calc')
+    postnatal_days = request.args.get('postnatal_days')
+    bw = request.args.get('bw')
+
+    # 2) ตรวจสอบว่ามีข้อมูลครบหรือไม่
+    if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
+        return "Invalid data received - missing parameters", 400
+
+    # 3) พยายามแปลงค่าที่ได้รับให้เป็นตัวเลข
+    try:
+        pma_weeks = int(pma_weeks)
+        pma_days = int(pma_days)
+        calc = float(calc)
+        postnatal_days = int(postnatal_days)
+        bw = float(bw)
+    except ValueError:
+        return "Invalid data received - value error", 400
+
+    # 4) เริ่มกำหนดตัวแปรเริ่มต้น
+    min_dose = None    # mg/kg/dose
+    interval = None    # q x hours
+    scenario = None    # เพื่อใช้ระบุว่าตรงกับเคสไหน (สำหรับ highlight หรือแสดงผลเพิ่มเติม)
+    explanation = ""   # สำหรับใส่ข้อความอธิบาย
+
+    # 5) ตัวอย่างเงื่อนไขการคำนวณ (Simplified) ----------------------------------
+    #
+    # ตัวอย่างที่ 1: เช็ค Anthrax (GA 32 to 37 weeks)
+    if 32 <= pma_weeks < 37:
+        if postnatal_days < 7:
+            # 0 to 1 week: 50 mg/kg/day orally / q12h => mg/kg/dose = 50/2 = 25 mg/kg/dose
+            min_dose = 25
+            interval = "every 12 hours"
+            scenario = "anthrax_32_37_wk_0_1"
+            explanation = ("Anthrax prophylaxis/treatment for GA 32–37 wk, age 0–1 wk: "
+                           "50 mg/kg/day divided q12h => 25 mg/kg/dose.")
+        else:
+            # 1 to 4 weeks: 75 mg/kg/day orally / q8h => mg/kg/dose = 75/3 = 25 mg/kg/dose
+            min_dose = 25
+            interval = "every 8 hours"
+            scenario = "anthrax_32_37_wk_1_4"
+            explanation = ("Anthrax prophylaxis/treatment for GA 32–37 wk, age ≥1–4 wk: "
+                           "75 mg/kg/day divided q8h => 25 mg/kg/dose.")
+
+    # ตัวอย่างที่ 2: Term newborn (GA >= 37 wk) / 0 to 4 weeks => 75 mg/kg/day q8h
+    elif pma_weeks >= 37 and postnatal_days <= 28:
+        min_dose = 25  # (75 mg/kg/day / 3)
+        interval = "every 8 hours"
+        scenario = "anthrax_term_0_4"
+        explanation = ("Anthrax prophylaxis/treatment for Term newborn (GA ≥ 37 wk, 0–4 wk): "
+                       "75 mg/kg/day divided q8h => 25 mg/kg/dose.")
+
+    # ตัวอย่างที่ 3: UTI prophylaxis => 10–15 mg/kg/day once daily
+    elif postnatal_days >= 0 and postnatal_days < 60:
+        min_dose = 10   # mg/kg/dose (ใช้ค่าน้อยสุดในตัวอย่าง)
+        interval = "once daily"
+        scenario = "uti_prophylaxis"
+        explanation = ("UTI prophylaxis recommended dose: 10–15 mg/kg/day orally once daily. "
+                       "ตัวอย่างนี้ใช้ค่าน้อยสุดคือ 10 mg/kg/dose.")
+
+    # ตัวอย่างที่ 4: กรณีทั่วไป Usual dose (Max 30 mg/kg/day) - manufacturer recommended
+    else:
+        min_dose = 15  # สมมติ 15 mg/kg/dose แบ่ง 2 ครั้ง => 30 mg/kg/day
+        interval = "every 12 hours"
+        scenario = "usual_dose"
+        explanation = ("Usual dose (manufacturer recommended): max 30 mg/kg/day orally, "
+                       "divided q12h.")
+
+    # 6) คำนวณ actual_dose (mg/dose) โดยการคูณน้ำหนัก (bw)
+    actual_dose = round(min_dose * bw, 2)
+
+    # 7) ส่งค่าไปยัง Template
+    return render_template(
+        'amoxicillin_clavimoxy_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,
+        min_dose=min_dose,    # mg/kg/dose
+        interval=interval,
+        actual_dose=actual_dose,  # mg/dose (คูณน้ำหนักแล้ว)
+        scenario=scenario,
+        explanation=explanation,
+        update_date=UPDATE_DATE
+    )
+
+
 
 
 
@@ -1836,57 +1979,145 @@ def colistin_dose():
 @app.route('/gentamicin_dose')
 def gentamicin_dose():
     # รับค่าจาก query parameters
+    pma_weeks      = request.args.get('pma_weeks')
+    pma_days       = request.args.get('pma_days')
+    calc           = request.args.get('calc')
+    postnatal_days = request.args.get('postnatal_days')
+    bw             = request.args.get('bw')
+
+    # ตรวจสอบพารามิเตอร์
+    if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
+        return "Invalid data received - missing parameters", 400
+
+    try:
+        pma_weeks      = int(pma_weeks)
+        pma_days       = int(pma_days)
+        calc           = float(calc)
+        postnatal_days = int(postnatal_days)
+        bw             = float(bw)
+    except ValueError:
+        return "Invalid data received - value error", 400
+
+    # กำหนดค่า dose per kg ตามช่วงอายุ
+    if pma_weeks <= 29 and postnatal_days <= 7:
+        dose_per_kg = 5.0
+    elif pma_weeks <= 29 and postnatal_days <= 28:
+        dose_per_kg = 4.0
+    elif pma_weeks <= 29 and postnatal_days > 28:
+        dose_per_kg = 4.0
+    elif 30 <= pma_weeks <= 34 and postnatal_days <= 7:
+        dose_per_kg = 4.5
+    elif 30 <= pma_weeks <= 34 and postnatal_days > 7:
+        dose_per_kg = 4.0
+    elif pma_weeks >= 35:
+        dose_per_kg = 4.0
+    else:
+        return "No suitable dose found", 400
+
+    # **คำนวณปริมาณยา แล้ว “ตัดเศษลง”** ให้ใช้ math.floor แทน round
+    raw_dose       = dose_per_kg * bw
+    calculated_dose = math.floor(raw_dose)
+
+    # ส่งไปแสดงผล
+    return render_template(
+        'gentamicin_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,
+        calculated_dose=calculated_dose,
+        update_date=UPDATE_DATE
+    )
+
+
+
+@app.route('/meropenam_dose')
+def meropenam_dose():
+    """
+    Route นี้ทำหน้าที่รับค่า PMA (pma_weeks, pma_days), postnatal age (postnatal_days),
+    น้ำหนักตัว (bw) และ calc (ค่าที่อาจใช้แสดงผลเพิ่มเติม)
+    จาก query parameters จากนั้นจะคำนวณขนาดยาตามเงื่อนไขใหม่ (Intra-abdominal and non-CNS infections)
+    และส่งข้อมูลไปยัง Template เพื่อแสดงผลลัพธ์พร้อม highlight สีเขียว
+    ในบรรทัดที่ตรงกับเงื่อนไข.
+    """
+
+    # 1) รับค่าจาก query parameters
     pma_weeks = request.args.get('pma_weeks')
     pma_days = request.args.get('pma_days')
     calc = request.args.get('calc')
     postnatal_days = request.args.get('postnatal_days')
     bw = request.args.get('bw')
 
-    # พิมพ์ค่าที่ได้รับจาก query parameters เพื่อการตรวจสอบ
-    print(f"Received values - pma_weeks: {pma_weeks}, pma_days: {pma_days}, calc: {calc}, postnatal_days: {postnatal_days}, bw: {bw}")
-
-    # ตรวจสอบค่าที่ได้รับ
+    # 2) ตรวจสอบว่ามีข้อมูลครบถ้วนหรือไม่
     if not all([pma_weeks, pma_days, calc, postnatal_days, bw]):
         return "Invalid data received - missing parameters", 400
 
+    # 3) พยายามแปลงค่าที่ได้รับให้เป็นตัวเลข
     try:
         pma_weeks = int(pma_weeks)
         pma_days = int(pma_days)
         calc = float(calc)
         postnatal_days = int(postnatal_days)
-        bw = float(bw)
+        bw = float(bw)  # รองรับค่า BW ที่เป็นทศนิยม
     except ValueError:
-        return "Invalid data received - value error", 400
+        return "Invalid input: Parameters must be numeric.", 400
 
-    # กำหนดค่า dose ตาม PMA และ postnatal age
-    recommended_dose_per_kg = None
+    # 4) กำหนดตัวแปรสำหรับจับเงื่อนไข (scenario) + ขนาดยา
+    scenario = None         # ใช้ระบุว่าอยู่ในเคสไหนเพื่อไป highlight ใน Template
+    min_dose_per_kg = None  # ขนาดยาต่ำสุด (mg/kg)
+    max_dose_per_kg = None  # ขนาดยาสูงสุด (mg/kg) — กรณีนี้อาจเท่ากับ min_dose_per_kg
+    interval = None         # ความถี่ในการให้ยา
 
-    # ตรวจสอบเงื่อนไขตามช่วงอายุเพื่อกำหนด dose
-    if pma_weeks <= 29 and postnatal_days <= 7:
-        recommended_dose_per_kg = 5.0  # mg/kg
-    elif pma_weeks <= 29 and postnatal_days <= 28:
-        recommended_dose_per_kg = 4.0  # mg/kg
-    elif pma_weeks <= 29 and postnatal_days > 28:
-        recommended_dose_per_kg = 4.0  # mg/kg
-    elif 30 <= pma_weeks <= 34 and postnatal_days <= 7:
-        recommended_dose_per_kg = 4.5  # mg/kg
-    elif 30 <= pma_weeks <= 34 and postnatal_days > 7:
-        recommended_dose_per_kg = 4.0  # mg/kg
-    elif pma_weeks >= 35:
-        recommended_dose_per_kg = 4.0  # mg/kg
+    # 5) กำหนดเงื่อนไข "Intra-abdominal and non-CNS infections" ตามที่ระบุไว้
+    #    - Less than 32 weeks GA and less than 14 days PNA => 20 mg/kg IV q12h
+    #    - Less than 32 weeks GA and 14 days PNA and older => 20 mg/kg IV q8h
+    #    - 32 weeks GA and older, and less than 14 days PNA => 20 mg/kg IV q8h
+    #    - 32 weeks GA and older, and 14 days PNA and older => 30 mg/kg IV q8h
+    if pma_weeks < 32 and postnatal_days < 14:
+        scenario = 'intra1'
+        min_dose_per_kg = 20
+        max_dose_per_kg = 20
+        interval = "every 12 hours"
+    elif pma_weeks < 32 and postnatal_days >= 14:
+        scenario = 'intra2'
+        min_dose_per_kg = 20
+        max_dose_per_kg = 20
+        interval = "every 8 hours"
+    elif pma_weeks >= 32 and postnatal_days < 14:
+        scenario = 'intra3'
+        min_dose_per_kg = 20
+        max_dose_per_kg = 20
+        interval = "every 8 hours"
+    elif pma_weeks >= 32 and postnatal_days >= 14:
+        scenario = 'intra4'
+        min_dose_per_kg = 30
+        max_dose_per_kg = 30
+        interval = "every 8 hours"
 
-    if recommended_dose_per_kg is None:
-        return "No suitable dose found for the given PMA and postnatal age", 400
+    # 6) หากไม่เข้ากรณีใด ๆ เลย
+    if scenario is None:
+        return "No suitable dose found for the given PMA and postnatal age (Intra-abdominal scenario).", 400
 
-    # คำนวณปริมาณยาที่ควรได้รับ
-    calculated_dose = recommended_dose_per_kg * bw
-    calculated_dose = round(calculated_dose)  # ปัดเศษเป็นจำนวนเต็ม
+    # 7) คำนวณขนาดยาที่ควรได้รับ (mg/day)
+    calculated_min_dose = round(min_dose_per_kg * bw, 2)
+    calculated_max_dose = round(max_dose_per_kg * bw, 2)
 
-    # พิมพ์ค่า dose ที่คำนวณได้เพื่อการตรวจสอบ
-    print(f"Calculated dose: {calculated_dose} mg")
+    # 8) ส่งค่าที่คำนวณไปยัง Template
+    return render_template(
+        'meropenam_dose.html',
+        pma_weeks=pma_weeks,
+        pma_days=pma_days,
+        calc=calc,
+        postnatal_days=postnatal_days,
+        bw=bw,
+        min_dose=calculated_min_dose,
+        max_dose=calculated_max_dose,
+        interval=interval,
+        scenario=scenario,      # ส่ง scenario ไปด้วยเพื่อให้ Template รู้ว่าต้อง highlight บรรทัดไหน
+        update_date=UPDATE_DATE
+    )
 
-    # ส่งค่าไปที่ template พร้อมกับ update_date
-    return render_template('gentamicin_dose.html', pma_weeks=pma_weeks, pma_days=pma_days, calc=calc, postnatal_days=postnatal_days, bw=bw, calculated_dose=calculated_dose, update_date=UPDATE_DATE)
 
 
 
@@ -1941,9 +2172,7 @@ def vancomycin_dose():
 
 
 
-
-
-
+# 6) เรียกใช้งานเซิร์ฟเวอร์
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
-    app.run(host="0.0.0.0", port=port, debug=True)  # เปิดใช้งาน Debug Mode
+    app.run(host="0.0.0.0", port=port, debug=True)
