@@ -22,7 +22,7 @@
 
   <div class="card">
     <h3>รายละเอียดที่สแกนได้</h3>
-    <pre>{{ order|tojson(indent=2) }}</pre>
+    <pre>{{ order|tojson() }}</pre>
   </div>
 
   {% if calc_url %}

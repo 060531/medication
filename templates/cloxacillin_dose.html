@@ -159,7 +159,7 @@
     <!-- Display the calculated PMA and Postnatal Age -->
     <p><strong>PMA:</strong> {{ pma_weeks }} weeks and {{ pma_days }} days</p>
     <p><strong>Calc.:</strong> {{ calc }} weeks</p>
-    <p><strong>Postnatal Age:</strong> {{ postnatal_days }} days</p>
+    <p><strong>Postnatal Age:</strong> {{ postnatal_days if postnatal_days is defined else "-" }} days</p>
     <p><strong>Birth Weight (BW):</strong> {{ bw }} kg</p>
 
     <!-- Display the calculated dosage for neonates -->
@@ -174,31 +174,31 @@
             <th>Dose (mg)</th>
             <th>Interval</th>
         </tr>
-        <tr class="{% if pma_weeks <= 29 and postnatal_days <= 28 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and pma_weeks <= 29 and postnatal_days <= 28  %} highlight {% endif %}">
             <td>29 wk-</td>
             <td>0 - 28 days</td>
             <td>40.00</td>
             <td>q 12 hr(s)</td>
         </tr>
-        <tr class="{% if 30 <= pma_weeks <= 36 and postnatal_days <= 14 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and 30 <= pma_weeks <= 36 and postnatal_days <= 14  %} highlight {% endif %}">
             <td>30 - 36 wk</td>
             <td>0 - 14 days</td>
             <td>40.00</td>
             <td>q 12 hr(s)</td>
         </tr>
-        <tr class="{% if 30 <= pma_weeks <= 36 and postnatal_days > 14 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and 30 <= pma_weeks <= 36 and postnatal_days > 14  %} highlight {% endif %}">
             <td>30 - 36 wk</td>
             <td>15 days+</td>
             <td>40.00</td>
             <td>q 8 hr(s)</td>
         </tr>
-        <tr class="{% if 37 <= pma_weeks <= 44 and postnatal_days <= 7 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and 37 <= pma_weeks <= 44 and postnatal_days <= 7  %} highlight {% endif %}">
             <td>37 - 44 wk</td>
             <td>0 - 7 days</td>
             <td>40.00</td>
             <td>q 8 hr(s)</td>
         </tr>
-        <tr class="{% if 37 <= pma_weeks <= 44 and postnatal_days > 7 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and 37 <= pma_weeks <= 44 and postnatal_days > 7  %} highlight {% endif %}">
             <td>37 - 44 wk</td>
             <td>8 days+</td>
             <td>40.00</td>

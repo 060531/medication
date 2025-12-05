@@ -1,27 +1,72 @@
 [
   {
-    "drug": "Acyclovir",
-    "co_drug": "Amikacin",
-    "status": "Compatible",
-    "note": "ยาสามารถผสมร่วมกันได้",
-    "en": "Y-site compatible under standard conditions.",
-    "th": "ยาสามารถผสมร่วมกันได้ (Y-site) หากเงื่อนไขมาตรฐาน",
-    "detail": {
-      "context": "Y-site",
-      "diluent": ["NS", "D5W"],
-      "conc_a": "Acyclovir 1–5 mg/mL",
-      "conc_b": "Amikacin 1–5 mg/mL",
-      "contact_time": "≤ 60 นาที",
-      "temperature": "Room temperature",
-      "flush": "Flush NS 5–10 mL ก่อน-หลัง",
-      "cautions": ["สังเกตการขุ่น/ตกผลึกที่ Y-site"],
-      "evidence": {
-        "level": "B",
-        "sources": [
-          {"name":"Trissel’s IV Compatibility","year":2024,"note":"Y-site data"}
-        ]
-      },
-      "last_reviewed": "2025-09-30"
-    }
+    "drug_a": "Acyclovir",
+    "drug_b": "Amikacin",
+    "status": "C",
+    "note_th": "ยาสามารถผสมร่วมกันได้",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Aminophylline",
+    "status": "C",
+    "note_th": "ยาสามารถผสมร่วมกันได้",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Ampicillin",
+    "status": "C",
+    "note_th": "ยาสามารถผสมร่วมกันได้",
+    "reference": "Trissel's Handbook 2024"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Calcium gluconate",
+    "status": "I",
+    "note_th": "ไม่เข้ากัน มีความเสี่ยงเกิดตะกอน ไม่ควรให้ร่วมสาย",
+    "reference": "Pediatric Injectable Drugs"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Colistin",
+    "status": "ND",
+    "note_th": "ไม่มีข้อมูลที่เชื่อถือได้ แนะนำหลีกเลี่ยงการให้ร่วมสาย (Y-site) ใช้แยก line หรือ flush ก่อน-หลัง",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Amphotericin B",
+    "status": "I",
+    "note_th": "ไม่ควรให้ร่วมกันใน line เดียวกัน (เสี่ยงไม่เข้ากัน/ความคงตัว)",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Cefotaxime",
+    "status": "C",
+    "note_th": "ยาสามารถผสมร่วมกันได้",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Acyclovir",
+    "drug_b": "Cloxacillin",
+    "status": "C",
+    "note_th": "ยาสามารถผสมร่วมกันได้",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Cefotaxime",
+    "drug_b": "Cloxacillin",
+    "status": "C",
+    "note_th": "ยาสามารถผสมร่วมกันได้",
+    "reference": "Trissel's 2022"
+  },
+  {
+    "drug_a": "Cefotaxime",
+    "drug_b": "Levofloxacin",
+    "status": "U",
+    "note_th": "ไม่แน่ชัด แนะนำหลีกเลี่ยงการให้ร่วมสาย ใช้แยก line หรือ flush ก่อน-หลัง",
+    "reference": "Trissel's 2022"
   }
 ]

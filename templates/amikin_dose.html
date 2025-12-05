@@ -158,7 +158,7 @@
         <!-- Display the calculated PMA and Postnatal Age -->
     <p><strong>PMA:</strong> {{ pma_weeks }} weeks and {{ pma_days }} days</p>
     <p><strong>Calc.:</strong> {{ calc }} weeks</p>
-    <p><strong>Postnatal Age:</strong> {{ postnatal_days }} days</p>
+    <p><strong>Postnatal Age:</strong> {{ postnatal_days if postnatal_days is defined else "-" }} days</p>
     <p><strong>Birth Weight (BW):</strong> {{ bw }} kg</p>
 
     <!-- Display the calculated dosage for neonates -->
@@ -227,27 +227,27 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="{% if pma_weeks <= 29 and postnatal_days <= 7 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and pma_weeks <= 29 and postnatal_days <= 7  %} highlight {% endif %}">
             <td>29 weeks or less</td>
             <td>0 to 7 days</td>
             <td>14 mg/kg/dose every 48 hours</td>
         </tr>
-        <tr class="{% if pma_weeks <= 29 and 8 <= postnatal_days <= 28 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and pma_weeks <= 29 and 8 <= postnatal_days <= 28  %} highlight {% endif %}">
             <td>29 weeks or less</td>
             <td>8 to 28 days</td>
             <td>12 mg/kg/dose every 36 hours</td>
         </tr>
-        <tr class="{% if pma_weeks <= 29 and postnatal_days > 28 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and pma_weeks <= 29 and postnatal_days > 28  %} highlight {% endif %}">
             <td>29 weeks or less</td>
             <td>29 days or older</td>
             <td>12 mg/kg/dose every 24 hours</td>
         </tr>
-        <tr class="{% if 30 <= pma_weeks <= 34 and postnatal_days <= 7 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and 30 <= pma_weeks <= 34 and postnatal_days <= 7  %} highlight {% endif %}">
             <td>30 to 34 weeks</td>
             <td>0 to 7 days</td>
             <td>12 mg/kg/dose every 36 hours</td>
         </tr>
-        <tr class="{% if 30 <= pma_weeks <= 34 and postnatal_days > 7 %} highlight {% endif %}">
+        <tr class="{% if postnatal_days is defined and 30 <= pma_weeks <= 34 and postnatal_days > 7  %} highlight {% endif %}">
             <td>30 to 34 weeks</td>
             <td>8 days or older</td>
             <td>12 mg/kg/dose every 24 hours</td>

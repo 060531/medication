@@ -2,6 +2,10 @@
 {% block title %}Phenobarbital: คิด mL จาก mg + วิธีผสม{% endblock %}
 
 {% block content %}
+{% set target_conc = (target_conc|default(20,true))|float %}
+{% set dose = (dose|default(0,true))|float %}
+{% set vol_ml = (vol_ml|default(0,true))|float %}
+
 <style>
   :root { color-scheme: light; }
 
@@ -128,8 +132,8 @@
 <div class="card">
   <h2 class="title">Phenobarbital</h2>
   <div class="hint">
-    คำนวณที่ความเข้มข้นมาตรฐาน <b>{{ '%g'|format(target_conc) }} mg/ml</b><br>
-    <small>สูตร: ml = mg ÷ {{ '%g'|format(target_conc) }}</small>
+    คำนวณที่ความเข้มข้นมาตรฐาน <b>{{ '%g'|format((target_conc|default(20,true)|default(0,true))) }} mg/ml</b><br>
+    <small>สูตร: ml = mg ÷ {{ '%g'|format((target_conc|default(20,true)|default(0,true))) }}</small>
   </div>
 
   <form method="post" class="row">
@@ -144,20 +148,21 @@
     <div class="err">ผิดพลาด: {{ error }}</div>
   {% endif %}
 
-  {% if vol_ml is not none %}
+  {% if (dose|default(0,true))|float > 0 and (target_conc|default(20,true))|float > 0 %}
+
     <div class="result">
-      <div class="big">{{ '%.2f'|format(vol_ml) }} ml</div>
-      <div class="hint">ให้ตามปริมาณนี้ที่ความเข้มข้น {{ '%g'|format(target_conc) }} mg/ml</div>
+      <div class="big">{{ '%.2f'|format((vol_ml|default(0,true)|default(0,true))) }} ml</div>
+      <div class="hint">ให้ตามปริมาณนี้ที่ความเข้มข้น {{ '%g'|format((target_conc|default(20,true)|default(0,true))) }} mg/ml</div>
 
       <!-- สูตร/แทนค่า (แถวเดียว) -->
       <div class="formula">
         <div class="line">
           <span class="hl">สูตร:</span>
-          <span class="mono">ml = mg ÷ {{ '%g'|format(target_conc) }}</span>
+          <span class="mono">ml = mg ÷ {{ '%g'|format((target_conc|default(20,true)|default(0,true))) }}</span>
         </div>
         <div class="line" style="margin-top:6px">
           <span>แทนค่า:</span>
-          <span class="mono">{{ '%.2f'|format(dose) }} ÷ {{ '%g'|format(target_conc) }} = {{ '%.2f'|format(vol_ml) }} ml</span>
+          <span class="mono">{{ '%.2f'|format((dose|default(0,true)|default(0,true))) }} ÷ {{ '%g'|format((target_conc|default(20,true)|default(0,true))) }} = {{ '%.2f'|format((vol_ml|default(0,true)|default(0,true))) }} ml</span>
         </div>
       </div>
 
@@ -168,17 +173,24 @@
         {# แต่ละชุด 1+9 ได้ 10 mL @ 20 mg/ml = 200 mg ต่อชุด #}
         {% set batch_vol_ml = 10.0 %}
         {% set batch_mg = 200.0 %}
-        {% set batches = (dose // batch_mg)|int + (1 if (dose % batch_mg) > 0 else 0) %}
-        {% set last_batch_mg = (dose - batch_mg * (batches - 1)) if batches > 0 else 0 %}
-        {% set last_batch_vol = last_batch_mg / 20.0 %}
+          {% set dose_num = (dose|default(0,true))|float %}
+        {% set batches = (dose_num // batch_mg)|int + (1 if (dose_num % batch_mg) > 0 else 0) %}
+        {% set last_batch_mg = (dose_num - batch_mg * (batches - 1)) if batches > 0 else 0 %}
+        {% set last_batch_vol = (last_batch_mg|float) / 20.0 %}
 
         <ul>
-          <li>ปริมาณที่ต้องการ <b>{{ '%.2f'|format(last_batch_mg) }} mg</b> = <b>{{ '%.2f'|format(last_batch_vol) }} ml</b> (20 mg/ml)</li>
+          <li>ปริมาณที่ต้องการ <b>{{ '%.2f'|format((last_batch_mg|default(0,true)|default(0,true))) }} mg</b> = <b>{{ '%.2f'|format((last_batch_vol|default(0,true)|default(0,true))) }} ml</b> (20 mg/ml)</li>
         </ul>
 
       </div>
     </div>
-  {% endif %}
+  {% else %}
+  <div class="result">
+    <div class="big">—</div>
+    <div class="hint">กรอกขนาดยา (mg) แล้วกด “คำนวณ”</div>
+  </div>
+{% endif %}
+
 </div>
 
 <!-- 🔹 กล่องข้อมูล (1 คอลัมน์เสมอ) -->

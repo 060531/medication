@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phenobarbital: คิด mL จาก mg + วิธีผสม</title>
+
+  <style>
+    /* ---------- Global ---------- */
+    body{
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      background-image: url('https://cdn.jsdelivr.net/gh/060531/images/IMG_4200.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    h1{
+      font-size: 2.5em;
+      color: #ffffff;
+      text-shadow: 2px 2px 6px rgba(0,0,0,.6);
+      margin: 20px 0 16px;
+      background: linear-gradient(135deg, rgb(3,158,172), rgb(0,122,140));
+      padding: 15px 30px;
+      border-radius: 15px;
+      display: inline-block;
+      border: 2px solid rgba(0,122,140,.5);
+      box-shadow: 0 4px 15px rgba(0,0,0,.3);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    /* กล่องครอบเนื้อหาแนวคอลัมน์: h1 อยู่บน, โซนปุ่มอยู่ถัดลงมา */
+    .container{
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.2);
+      max-width: 1000px;
+      width: 100%;
+      background-color: transparent;
+
+      display: flex;
+      flex-direction: column;   /* สำคัญ: แยก h1 ออกจากโซนปุ่ม */
+      align-items: center;
+      gap: 20px;
+      box-sizing: border-box;
+    }
+
+    /* ปุ่มพื้นฐาน */
+    .button{
+      display: inline-flex;
+      margin: 10px;
+      padding: 10px;
+      font-size: 14px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #2e8aec;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 5px #999;
+      width: 150px;
+      height: 110px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .button img{
+      max-width: 50px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    .button:hover{ background-color:#0056b3; }
+    .button:active{
+      background-color:#0056b3;
+      box-shadow:0 5px #666;
+      transform: translateY(4px);
+    }
+
+    /* ปุ่มเฉพาะหน้า Home */
+    .home-button{ background-color:#008CBA; }
+    .home-button:hover{ background-color:#005f99; }
+    .home-button:active{
+      background-color:#005f99;
+      box-shadow:0 5px #666;
+      transform: translateY(4px);
+    }
+
+    /* Footer */
+    footer{
+      text-align:center;
+      margin-top:auto;
+      color:#fff;
+      font-size:16px;
+      text-shadow:2px 2px 5px rgba(3,3,3,.7);
+      padding:10px;
+    }
+
+    /* โซนปุ่มหน้า Home (เดสก์ท็อป/แท็บเล็ต: ใช้ flex wrap) */
+    .home-grid{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+      box-sizing: border-box;
+    }
+
+    /* ---------- Mobile: ให้เฉพาะ .home-grid เป็น 2 คอลัมน์ ---------- */
+    @media (max-width: 600px){
+      .home-page h1{
+        font-size: 1.25rem;
+        padding: 8px 12px;
+        margin: 12px 0 0;
+      }
+      .home-grid{
+        display: grid;                                  /* ใช้ Grid เฉพาะโซนปุ่ม */
+        grid-template-columns: repeat(2, minmax(0,1fr));/* 2 กล่องต่อแถว */
+        gap: 16px;
+        width: 100%;
+        max-width: 420px;
+        padding: 12px;
+      }
+      .home-page .button{
+        width: 100%;   /* เต็มคอลัมน์ */
+        height: 110px;
+        margin: 0;     /* ใช้ gap ของ grid แทน */
+        font-size: 13px;
+        border-radius: 12px;
+      }
+      .home-page .button img{
+        max-width: 36px;
+        margin-bottom: 6px;
+      }
+    }
+
+/* ---------- Mobile: หน้า Home ให้ 2 คอลัมน์, ช่องไฟมากขึ้น, ปุ่มเล็กลง ---------- */
+@media (max-width: 600px){
+  .home-page h1{
+    font-size: 1.2rem;
+    padding: 8px 12px;
+    margin: 12px 0 4px;
+  }
+
+  .home-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr)); /* 2 กล่องต่อแถว */
+    column-gap: 22px;   /* เพิ่มช่องว่างแนวนอน */
+    row-gap: 22px;      /* เพิ่มช่องว่างแนวตั้ง  */
+    width: 100%;
+    max-width: 420px;
+    padding: 14px;
+    box-sizing: border-box;
+    place-items: center; /* จัดปุ่มให้อยู่กลางคอลัมน์เมื่อปุ่มแคบลง */
+  }
+
+  /* ปุ่มภายใน grid: แคบและเตี้ยลงจากเดิม */
+  .home-page .button{
+    width: 92%;          /* ลดความกว้าง (จากเดิม 100%) */
+    height: 96px;        /* ลดความสูง (เดิม ~110px)  */
+    margin: 0;           /* ใช้ช่องว่างจาก grid แทน */
+    font-size: 12.5px;   /* ย่อฟอนต์ลงเล็กน้อย */
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px #999;
+  }
+
+  .home-page .button img{
+    max-width: 32px;     /* ไอคอนเล็กลงให้สมดุลกับปุ่ม */
+    margin-bottom: 6px;
+  }
+
+  .home-page .button span small{
+    font-size: 11px;     /* ย่อข้อความวงเล็บ */
+    opacity: 0.95;
+  }
+}
+  </style>
+</head>
+
+<body class="">
+  <div class="container">
+    
+
+
+
+
+<style>
+  :root { color-scheme: light; }
+
+  /* กล่องคำนวณ */
+  .card{
+    max-width:680px;margin:24px auto;background:#fff;border:1px solid #e5e7eb;
+    border-radius:16px;padding:20px 20px 16px;box-shadow:0 10px 24px rgba(2,8,23,.12)
+  }
+  .title{margin:0 0 8px 0;font-size:22px;font-weight:800;color:#0f172a;text-align:center}
+  .hint{color:#475569;text-align:center;margin-bottom:12px}
+  .row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;margin-top:8px}
+  label{font-weight:700;color:#0f172a}
+  input[type="number"]{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px}
+  .btn{padding:12px 16px;border-radius:10px;border:0;background:#0ea5e9;color:#fff;font-weight:800;cursor:pointer}
+  .btn:hover{filter:brightness(.97)}
+  .err{color:#b91c1c;margin-top:8px;text-align:center;font-weight:700}
+
+  .result{margin-top:14px;padding:14px;border-radius:12px;background:#f8fafc;border:1px dashed #cbd5e1}
+  .big{font-size:28px;font-weight:900;color:#111827;text-align:center}
+
+  /* สูตร/แทนค่า—บรรทัดเดียว */
+  .formula { text-align:center }
+  .formula .line{
+    display:flex; gap:8px; align-items:center; justify-content:center;
+    flex-wrap:nowrap; white-space:nowrap;
+  }
+  .mono{
+    font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-weight:800; padding:2px 6px; border-radius:6px;
+    background:#e7527e; color:#fff;
+  }
+  @media (max-width: 400px){
+    .formula .line{ flex-wrap:wrap; white-space:normal; }
+  }
+
+/* กล่องข้อมูลประกอบ (บังคับ 1 คอลัมน์เสมอ) */
+.sections.one-col{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 900px;
+  margin: 18px auto 0;
+}
+
+/* กล่องแต่ละส่วน + เนื้อหาชิดซ้าย */
+.section{
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 14px 16px;
+  text-align: left;            /* เนื้อหาชิดซ้าย */
+}
+
+/* หัวข้ออยู่กึ่งกลาง */
+.section h3{
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;          /* หัวข้อกึ่งกลาง */
+}
+
+/* ข้อความ/ลิสต์ภายใน ให้ชิดซ้ายเสมอ */
+.section p{
+  margin: 6px 0;
+  color: #334155;
+  text-align: left;
+}
+.section ul{
+  margin: 6px 0 0 18px;
+  color: #334155;
+  text-align: left;
+}
+
+/* ไฮไลต์ตัวหนา */
+.hl{
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.header-box{
+    background: linear-gradient(180deg,#8ad2f8,#e2e8f0); /* ไล่สีอ่อน */
+    border:1px solid #97a7c9;
+    border-radius:18px;
+    padding:18px 20px;
+    box-shadow: 0 8px 22px rgba(2,8,23,.10);
+  }
+  .header-box h2{ margin:0; color:#0f172a; font-weight:800; }
+
+  /* ===== ปุ่มลอยล่าง-กึ่งกลาง ===== */
+  .foot-actions{
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex; gap: 12px; justify-content: center; align-items: center;
+
+    background: rgba(255, 255, 255, 0.525);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 10px 12px;
+    border: 1px solid rgba(15,23,42,0.08);
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(2,8,23,.18);
+    z-index: 60;
+  }
+  .foot-actions a{
+    display:inline-block;text-decoration:none;color:#ffffff;font-weight:600;
+    padding:6px 17px;border-radius:9px;min-width:0px;text-align:center;
+  }
+  .back{ background:#64748b; }
+  .home{ background:#16a34a; }
+  @media (max-width: 560px){
+    .foot-actions{ gap:8px; padding:8px 10px; bottom:12px; }
+    .foot-actions a{ min-width:150px; padding:12px 16px; }
+  }
+</style>
+    <div class="container">
+          <div class="header-box">
+            <h2>Phenobarbital 200 mg/mL</h2>
+        </div>
+    </div>
+        
+<div class="card">
+  <h2 class="title">Phenobarbital</h2>
+  <div class="hint">
+    คำนวณที่ความเข้มข้นมาตรฐาน <b>20 mg/ml</b><br>
+    <small>สูตร: ml = mg ÷ 20</small>
+  </div>
+
+  <form method="post" class="row">
+    <div>
+      <label>ปริมาณที่ต้องการ (mg)</label>
+      <input type="number" step="0.01" min="0" name="dose" value="" required>
+    </div>
+    <button class="btn" type="submit">คำนวณ</button>
+  </form>
+
+  
+
+  
+  <div class="result">
+    <div class="big">—</div>
+    <div class="hint">กรอกขนาดยา (mg) แล้วกด “คำนวณ”</div>
+  </div>
+
+
+</div>
+
+<!-- 🔹 กล่องข้อมูล (1 คอลัมน์เสมอ) -->
+<div class="sections one-col">
+
+  <div class="section">
+    <h3>🔹 ข้อมูลพื้นฐาน</h3>
+    <ul>
+      <li><span class="hl">Phenobarbital sodium (Ampule)</span> 1 mL = <b>200 mg/ml</b> (เข้มข้นสูง)</li>
+      <li><b>ต้องเจือจางก่อนใช้</b> เพื่อให้เหมาะสมต่อการให้ผู้ป่วย</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🔹 วิธีการผสม</h3>
+    <p><b>ขนาดยา:</b> Phenobarbital <b>200 mg/ml</b></p>
+    <p><b>ตัวทำละลายที่ใช้ได้:</b> SWFI, D5W, D10W, NSS</p>
+    <p><b>สูตรจำง่าย:</b> <code>1 ml phenobarbital + 9 ml diluent = 20 mg/ml</code></p>
+  </div>
+
+  <div class="section">
+    <h3>🔹 ข้อควรจำหลังผสม</h3>
+    <ul>
+      <li>ใช้ทันทีหลังผสม (ampule)</li>
+      <li>เก็บให้พ้นแสง</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🔹 ความเข้มข้นสุดท้ายก่อนให้</h3>
+    <ul>
+      <li>ควรไม่เกิน <b>10 mg/ml</b> เพื่อป้องกันการระคายเคืองหลอดเลือด</li>
+      <li>อัตราการให้ <b>ไม่เกิน 1 mg/kg/min</b></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🔹 การติดตามหลังให้ยา (Monitor)</h3>
+    <ul>
+      <li>Heart Rate: ระวัง bradycardia</li>
+      <li>Seizure: ประเมินอาการชัก</li>
+      <li>Blood Pressure: ระวัง hypotension</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🔹 Drug incompatibility (ยาที่ห้ามผสมในหลอดเดียวกัน)</h3>
+    <ul>
+      <li>Adrenaline</li>
+      <li>Bactrim</li>
+      <li>Cefotaxime</li>
+      <li>Dobutamine</li>
+      <li>Levophed</li>
+      <li>Phenytoin</li>
+      <li>Fat emulsion</li>
+      <li>Ranitidine</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ปุ่มล่าง: ลอยติดขอบล่าง กึ่งกลางจอ -->
+<div class="foot-actions">
+  <a href="./Medication_administration.html" class="back">Back</a>
+  <a href="./index.html" class="home">Back to Home</a>
+</div>
+
+  </div>
+
+  <footer>
+    <p>Developed by Sukhontha Boonsookchan | update 2025-12-05 10:51</p>
+  </footer>
+</body>
+</html>
