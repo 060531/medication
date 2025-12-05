@@ -1,9 +1,31 @@
+# venv
 venv/
 .venv/
+
+# Python cache
 __pycache__/
 *.pyc
+
+# macOS
 .DS_Store
+
+# Local DB / sqlite
 app.db
-instance/app.db
-*.bak*
+instance/*.db
+*.sqlite
+*.sqlite3
+
+# Local tooling artifacts
+.exit
+.schema
+.tables
 *.save
+*.bak
+*.bak*
+
+# backup copies
+Dockerfile.save
+wsgi.py.save
+
+# editor (ถ้าใช้คนเดียว แนะนำ ignore)
+.vscode/
